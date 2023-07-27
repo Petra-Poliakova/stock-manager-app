@@ -1,9 +1,15 @@
-import React from 'react';
+import React from "react";
 import {
-  createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
-import HomePage from './app/pages/HomePage';
-import OverviewProducts from './app/pages/OverviewProducts';
-import NavBar from './app/components/NavBar';
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+import HomePage from "./app/pages/HomePage";
+import OverviewProducts from "./app/pages/OverviewProducts";
+import NavBar from "./app/components/NavBar";
+
+import "./styles/globalStyle.scss";
 
 // const router = createBrowserRouter([
 //       {
@@ -17,7 +23,7 @@ import NavBar from './app/components/NavBar';
 //     ]);
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<NavBar/> }>
+    <Route path="/" element={<NavBar />}>
       <Route index element={<HomePage />} />
       <Route path="overview" element={<OverviewProducts />} />
     </Route>
@@ -25,7 +31,7 @@ const router = createBrowserRouter(
 );
 
 const App = () => {
-  return ( <RouterProvider router={router} /> );
-}
+  return <RouterProvider router={router} />;
+};
 
 export default App;

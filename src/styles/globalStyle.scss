@@ -1,0 +1,156 @@
+//color variables
+$primary-color: #202e44; //logo, headlines, button
+$secondary-color: #a9bbc8;
+$neutral-primary-color: #c7bcab;
+$neutral-secondary-color: #f2f2eb;
+$primary800-color: #283a55;
+$primary600-color: #304567;
+$primary200-color: #f5f6f7;
+$primary100-color: #fafafb;
+$accent: #8b734c;
+$white-color: #ffffff;
+$neutral-secondary200-color: #fafaf7;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: $primary-color;
+}
+
+h1 {
+  font-size: 2em;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.8em;
+}
+
+h3 {
+  font-size: 1.6em;
+}
+
+h4 {
+  font-size: 1em;
+}
+
+h5 {
+  font-size: 0.875em;
+}
+
+h6 {
+  font-size: 0.75em;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+header {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  width: 100%;
+  min-height: 70px;
+  background-color: $primary-color;
+}
+
+.logo-container {
+  width: 25%;
+  padding: 5px 25px;
+  .logo {
+    width: 50px;
+    height: 35px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+nav {
+  width: 75%;
+  text-align: end;
+  padding: 5px 25px;
+
+  a {
+    margin: 0 10px;
+    font-size: 20px;
+    font-weight: 500;
+    color: $white-color;
+    text-decoration: none;
+  }
+}
+a.active {
+  text-decoration: underline;
+}
+
+.tableHeaderStyle {
+  background-color: $accent;
+  border-right: 7px solid $white-color;
+  color: $white-color;
+  padding: 10px;
+  font-weight: "bold";
+}
+.tableCellStyle {
+  background-color: $primary200-color;
+  border: 7px solid $white-color;
+  padding: 10px;
+}
+
+.form-box {
+  max-width: 50%;
+  border-radius: 5px;
+  border: 2px solid $primary-color;
+  padding: 25px;
+  background-color: $neutral-secondary-color;
+}
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: $primary800-color;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: $primary600-color;
+}
+
+button:active {
+  background-color: $accent;
+}
+
+button:focus {
+  outline: none;
+}

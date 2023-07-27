@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 
 type dataType = {
-    id: number;
+  id: number;
   title: string;
   brand: string;
   category: string;
   price: number;
-}
+};
 
 const OverviewProducts = () => {
-    const [data, setData] = useState<dataType[]>([]);
+  const [data, setData] = useState<dataType[]>([]);
   const [filterTitle, setFilterTitle] = useState<string>("");
   const [filterBrand, setFilterBrand] = useState<string>("");
   const [filterCategory, setFilterCategory] = useState<string>("");
@@ -69,10 +69,9 @@ const OverviewProducts = () => {
     setFilteredData(data);
   };
 
-
   return (
     <div>
-      <h1>Filter product</h1>
+      <h1>Overview products</h1>
       <div
         style={{
           display: "flex",
@@ -160,7 +159,7 @@ const OverviewProducts = () => {
         </tbody>
       </table>
     </div>
-  )
-}
+  );
+};
 
-export default OverviewProducts
+export default OverviewProducts;
