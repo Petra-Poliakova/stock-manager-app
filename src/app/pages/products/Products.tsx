@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+import './../../../styles/globalStyle.scss'
 
 type dataType = {
   id: number;
@@ -8,7 +11,7 @@ type dataType = {
   price: number;
 };
 
-const OverviewProducts = () => {
+const Products = () => {
   const [data, setData] = useState<dataType[]>([]);
   const [filterTitle, setFilterTitle] = useState<string>("");
   const [filterBrand, setFilterBrand] = useState<string>("");
@@ -70,17 +73,20 @@ const OverviewProducts = () => {
   };
 
   return (
-    <div>
-      <h1>Overview products</h1>
-      <div
+    <div className="container" style={{width:'95%', margin:'0 auto'}} >
+      <h1>Overview</h1>
+      <div className="pageContainer" style={{display:'flex', flexDirection:'row'}}>
+      <div className="filter"
         style={{
           display: "flex",
           flexDirection: "column",
           width: "20%",
-          margin: "0 50px",
+          margin: '25px auto',
+          borderTop: '5px solid #202e44',
         }}
       >
-        <div
+        <p style={{color:'#8b734c', fontSize:'20px', fontWeight:'700'}}>Filter by</p>
+        <div className="filterItem"
           style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
         >
           <input
@@ -89,9 +95,9 @@ const OverviewProducts = () => {
             value={filterTitle}
             onChange={(e) => setFilterTitle(e.target.value)}
           />
-          <button onClick={handleClearFilterTitle}>clear</button>
+          <button onClick={handleClearFilterTitle}>X</button>
         </div>
-        <div
+        <div  className="filterItem"
           style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
         >
           <input
@@ -100,9 +106,9 @@ const OverviewProducts = () => {
             value={filterBrand}
             onChange={(e) => setFilterBrand(e.target.value)}
           />
-          <button onClick={handleClearFilterBrand}>clear</button>
+          <button onClick={handleClearFilterBrand}>X</button>
         </div>
-        <div
+        <div  className="filterItem"
           style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
         >
           <input
@@ -111,9 +117,9 @@ const OverviewProducts = () => {
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
           />
-          <button onClick={handleClearFilterCategory}>clear</button>
+          <button onClick={handleClearFilterCategory}>X</button>
         </div>
-        <div
+        <div  className="filterItem"
           style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
         >
           <input
@@ -122,14 +128,14 @@ const OverviewProducts = () => {
             value={filterPrice}
             onChange={(e) => setFilterPrice(e.target.value)}
           />
-          <button onClick={handleClearFilterPrice}>clear</button>
+          <button onClick={handleClearFilterPrice}>X</button>
         </div>
 
-        {/* <button onClick={handleFilter}>Filter</button> */}
         <button style={{ margin: "10px 0" }} onClick={handleClearAllFilter}>
           Clear All
         </button>
       </div>
+      <div className="table" style={{width:'80%'}}>
       <table
         style={{
           width: "95%",
@@ -149,17 +155,19 @@ const OverviewProducts = () => {
         <tbody>
           {filteredData.map((item, index) => (
             <tr key={index}>
-              <td className="tableCellStyle">{item.id}</td>
+              <td className="tableCellStyle"><Link to={item.id.toString()}>{item.id}</Link></td>
               <td className="tableCellStyle">{item.title}</td>
               <td className="tableCellStyle">{item.brand}</td>
               <td className="tableCellStyle">{item.category}</td>
-              <td className="tableCellStyle">€ {item.price}</td>
+              <td className="tableCellStyle" style={{color: '#8b734c', fontWeight:'bold'}}>€ {item.price}</td>
             </tr>
           ))}
         </tbody>
       </table>
+      </div>
+      </div>
     </div>
   );
 };
 
-export default OverviewProducts;
+export default Products;
