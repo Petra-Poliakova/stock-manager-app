@@ -155,7 +155,7 @@ const Products = () => {
         <tbody>
           {filteredData.map((item, index) => (
             <tr key={index}>
-              <td className="tableCellStyle"><Link to={item.id.toString()}>{item.id}</Link></td>
+              <td className="tableCellStyle"><Link to={item.id.toString()} >{item.id}</Link></td>
               <td className="tableCellStyle">{item.title}</td>
               <td className="tableCellStyle">{item.brand}</td>
               <td className="tableCellStyle">{item.category}</td>

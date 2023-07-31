@@ -1,0 +1,36 @@
+@import './../globalStyle.scss';
+
+.contatWrapper{
+display: flex;
+justify-content: space-between;
+margin: 50px 0;
+
+.contactBox{
+    width: 23%;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: $white-color;
+    background-color: $accent;
+    animation: fadeOut 1s;
+}
+@keyframes fadeOut {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+  }
+p, h3, i {
+    margin: 5px 0;
+  }
+  h2 {
+    font-size: large;
+    font-weight: 600;
+    color:$neutral-secondary-color;
+    text-transform: uppercase;
+  }
+}
+
+  
+ 

@@ -81,7 +81,7 @@ header {
   }
 }
 
-nav {
+.rootNav {
   width: 75%;
   text-align: end;
   padding: 5px 25px;
@@ -98,6 +98,11 @@ a.active {
   text-decoration: underline;
 }
 
+.container{
+  width: 90%;
+  margin: 0 auto;
+}
+
 .tableHeaderStyle {
   background-color: $primary-color;
   border-right: 7px solid $white-color;
@@ -109,6 +114,11 @@ a.active {
   background-color: $primary200-color;
   border: 7px solid $white-color;
   padding: 10px;
+  
+  a{
+    text-decoration: none;
+  }
+ 
 }
 
 input[type="text"],
@@ -128,7 +138,10 @@ input[type=text]:focus {
     background-color: $neutral-secondary200-color;
     outline: none;
   }
-  
+textarea:focus {
+  outline: none;
+  border: 2px solid $accent;
+}
 button {
   padding: 10px 15px;
   background-color: $primary800-color;

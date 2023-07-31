@@ -14,7 +14,7 @@ const RootLayout = () => {
         </div>
       </div>
 
-      <nav>
+      <nav className='rootNav'>
         <NavLink
           to="/"
           className={({ isActive }) => (isActive ? "active" : "")}

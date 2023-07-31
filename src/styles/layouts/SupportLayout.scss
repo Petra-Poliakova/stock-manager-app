@@ -1,0 +1,23 @@
+@import './../globalStyle.scss';
+
+.supportNav{
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    background-color: $white-color;
+        a {
+            color: $accent;
+            font-size: 19px;
+            font-weight: 600;
+            text-decoration: none;
+            padding:25px 50px;
+            border: 3px solid $accent;
+            border-radius: 10px;
+            &:hover {
+                background-color: $neutral-secondary200-color;
+            }
+        }
+        a.active{
+            background-color: $neutral-secondary200-color;
+        }
+}

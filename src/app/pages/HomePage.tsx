@@ -1,8 +1,10 @@
 import React from 'react'
 
+import './../../styles/globalStyle.scss'
+
 const HomePage = () => {
   return (
-    <div style={{color: 'black', top:'100px'}}>
+    <div className='container'>
       
       <h1>Home Page</h1>
       
