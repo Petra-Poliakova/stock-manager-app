@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import Filter from "../../components/Filter";
 
-import './../../../styles/globalStyle.scss'
+import "./../../../styles/globalStyle.scss";
 
 type dataType = {
   id: number;
@@ -52,18 +52,31 @@ const Products = () => {
     setFilteredData(filteredData);
   }, [data, filterTitle, filterBrand, filterCategory, filterPrice]);
 
-  // const handleClearFilterTitle = () => {
-  //   setFilterTitle("");
-  // };
-  // const handleClearFilterBrand = () => {
-  //   setFilterBrand("");
-  // };
-  // const handleClearFilterCategory = () => {
-  //   setFilterCategory("");
-  // };
-  // const handleClearFilterPrice = () => {
-  //   setFilterPrice("");
-  // };
+  const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilterTitle(e.target.value);
+  };
+  const onChangeBrand = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilterBrand(e.target.value);
+  };
+  const onChangeCategory = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilterCategory(e.target.value);
+  };
+  const onChangePrice = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilterPrice(e.target.value);
+  };
+
+  const handleClearFilterTitle = () => {
+    setFilterTitle("");
+  };
+  const handleClearFilterBrand = () => {
+    setFilterBrand("");
+  };
+  const handleClearFilterCategory = () => {
+    setFilterCategory("");
+  };
+  const handleClearFilterPrice = () => {
+    setFilterPrice("");
+  };
 
   const handleClearAllFilter = () => {
     setFilterTitle("");
@@ -74,109 +87,139 @@ const Products = () => {
   };
 
   return (
-    <div className="container" style={{width:'95%', margin:'0 auto'}} >
+    <div className="container" style={{ width: "95%", margin: "0 auto" }}>
       <h1>Overview</h1>
-      <div className="pageContainer" style={{display:'flex', flexDirection:'row'}}>
-      <div className="filter"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "20%",
-          margin: '25px auto',
-          borderTop: '5px solid #202e44',
-        }}
+      <div
+        className="pageContainer"
+        style={{ display: "flex", flexDirection: "row" }}
       >
-        <p style={{color:'#8b734c', fontSize:'20px', fontWeight:'700'}}>Filter by</p>
-        <Filter
-          filterTitle={filterTitle}
-          filterBrand={filterBrand}
-          filterCategory={filterCategory}
-          filterPrice={filterPrice}
-          onFilterTitleChange={setFilterTitle}
-          onFilterBrandChange={setFilterBrand}
-          onFilterCategoryChange={setFilterCategory}
-          onFilterPriceChange={setFilterPrice}
-          onClearAllFilters={handleClearAllFilter}
-        />
-        {/* <div className="filterItem"
-          style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
+        <div
+          className="filter"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "20%",
+            margin: "25px auto",
+            borderTop: "5px solid #202e44",
+          }}
         >
-          <input
-            type="text"
+          <p style={{ color: "#8b734c", fontSize: "20px", fontWeight: "700" }}>
+            Filter by
+          </p>
+          <Filter
             placeholder="Filter by title"
             value={filterTitle}
-            onChange={(e) => setFilterTitle(e.target.value)}
+            onChange={onChangeTitle}
+            onClear={handleClearFilterTitle}
           />
-          <button onClick={handleClearFilterTitle}>X</button>
-        </div>
-        <div  className="filterItem"
-          style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
-        >
-          <input
-            type="text"
+          <Filter
             placeholder="Filter by brand"
             value={filterBrand}
-            onChange={(e) => setFilterBrand(e.target.value)}
+            onChange={onChangeBrand}
+            onClear={handleClearFilterBrand}
           />
-          <button onClick={handleClearFilterBrand}>X</button>
-        </div>
-        <div  className="filterItem"
-          style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
-        >
-          <input
-            type="text"
+          <Filter
             placeholder="Filter by category"
             value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
+            onChange={onChangeCategory}
+            onClear={handleClearFilterCategory}
           />
-          <button onClick={handleClearFilterCategory}>X</button>
-        </div>
-        <div  className="filterItem"
-          style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
-        >
-          <input
-            type="text"
+          <Filter
             placeholder="Filter by price"
             value={filterPrice}
-            onChange={(e) => setFilterPrice(e.target.value)}
+            onChange={onChangePrice}
+            onClear={handleClearFilterPrice}
           />
-          <button onClick={handleClearFilterPrice}>X</button>
-        </div>
+          {/* <div
+            className="filterItem"
+            style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
+          >
+            <input
+              type="text"
+              placeholder="Filter by title"
+              value={filterTitle}
+              onChange={(e) => setFilterTitle(e.target.value)}
+            />
+            <button onClick={handleClearFilterTitle}>X</button>
+          </div>
+          <div
+            className="filterItem"
+            style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
+          >
+            <input
+              type="text"
+              placeholder="Filter by brand"
+              value={filterBrand}
+              onChange={(e) => setFilterBrand(e.target.value)}
+            />
+            <button onClick={handleClearFilterBrand}>X</button>
+          </div>
+          <div
+            className="filterItem"
+            style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
+          >
+            <input
+              type="text"
+              placeholder="Filter by category"
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+            />
+            <button onClick={handleClearFilterCategory}>X</button>
+          </div>
+          <div
+            className="filterItem"
+            style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
+          >
+            <input
+              type="text"
+              placeholder="Filter by price"
+              value={filterPrice}
+              onChange={(e) => setFilterPrice(e.target.value)}
+            />
+            <button onClick={handleClearFilterPrice}>X</button>
+          </div> */}
 
-        <button style={{ margin: "10px 0" }} onClick={handleClearAllFilter}>
-          Clear All
-        </button> */}
-      </div>
-      <div className="table" style={{width:'80%'}}>
-      <table
-        style={{
-          width: "95%",
-          borderCollapse: "collapse",
-          margin: "25px auto",
-        }}
-      >
-        <thead>
-          <tr>
-            <th className="tableHeaderStyle">Id</th>
-            <th className="tableHeaderStyle">Title</th>
-            <th className="tableHeaderStyle">Brand</th>
-            <th className="tableHeaderStyle">Category</th>
-            <th className="tableHeaderStyle">Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.map((item, index) => (
-            <tr key={index}>
-              <td className="tableCellStyle"><Link to={item.id.toString()} >{item.id}</Link></td>
-              <td className="tableCellStyle">{item.title}</td>
-              <td className="tableCellStyle">{item.brand}</td>
-              <td className="tableCellStyle">{item.category}</td>
-              <td className="tableCellStyle" style={{color: '#8b734c', fontWeight:'bold'}}>€ {item.price}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      </div>
+          <button style={{ margin: "10px 0" }} onClick={handleClearAllFilter}>
+            Clear All
+          </button>
+        </div>
+        <div className="table" style={{ width: "80%" }}>
+          <table
+            style={{
+              width: "95%",
+              borderCollapse: "collapse",
+              margin: "25px auto",
+            }}
+          >
+            <thead>
+              <tr>
+                <th className="tableHeaderStyle">Id</th>
+                <th className="tableHeaderStyle">Title</th>
+                <th className="tableHeaderStyle">Brand</th>
+                <th className="tableHeaderStyle">Category</th>
+                <th className="tableHeaderStyle">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.map((item, index) => (
+                <tr key={index}>
+                  <td className="tableCellStyle">
+                    <Link to={item.id.toString()}>{item.id}</Link>
+                  </td>
+                  <td className="tableCellStyle">{item.title}</td>
+                  <td className="tableCellStyle">{item.brand}</td>
+                  <td className="tableCellStyle">{item.category}</td>
+                  <td
+                    className="tableCellStyle"
+                    style={{ color: "#8b734c", fontWeight: "bold" }}
+                  >
+                    € {item.price}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
