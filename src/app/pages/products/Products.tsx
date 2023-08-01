@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Filter from "../../components/Filter";
 
 import './../../../styles/globalStyle.scss'
 
@@ -51,18 +52,18 @@ const Products = () => {
     setFilteredData(filteredData);
   }, [data, filterTitle, filterBrand, filterCategory, filterPrice]);
 
-  const handleClearFilterTitle = () => {
-    setFilterTitle("");
-  };
-  const handleClearFilterBrand = () => {
-    setFilterBrand("");
-  };
-  const handleClearFilterCategory = () => {
-    setFilterCategory("");
-  };
-  const handleClearFilterPrice = () => {
-    setFilterPrice("");
-  };
+  // const handleClearFilterTitle = () => {
+  //   setFilterTitle("");
+  // };
+  // const handleClearFilterBrand = () => {
+  //   setFilterBrand("");
+  // };
+  // const handleClearFilterCategory = () => {
+  //   setFilterCategory("");
+  // };
+  // const handleClearFilterPrice = () => {
+  //   setFilterPrice("");
+  // };
 
   const handleClearAllFilter = () => {
     setFilterTitle("");
@@ -86,7 +87,18 @@ const Products = () => {
         }}
       >
         <p style={{color:'#8b734c', fontSize:'20px', fontWeight:'700'}}>Filter by</p>
-        <div className="filterItem"
+        <Filter
+          filterTitle={filterTitle}
+          filterBrand={filterBrand}
+          filterCategory={filterCategory}
+          filterPrice={filterPrice}
+          onFilterTitleChange={setFilterTitle}
+          onFilterBrandChange={setFilterBrand}
+          onFilterCategoryChange={setFilterCategory}
+          onFilterPriceChange={setFilterPrice}
+          onClearAllFilters={handleClearAllFilter}
+        />
+        {/* <div className="filterItem"
           style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
         >
           <input
@@ -133,7 +145,7 @@ const Products = () => {
 
         <button style={{ margin: "10px 0" }} onClick={handleClearAllFilter}>
           Clear All
-        </button>
+        </button> */}
       </div>
       <div className="table" style={{width:'80%'}}>
       <table
@@ -171,3 +183,11 @@ const Products = () => {
 };
 
 export default Products;
+
+//TODO
+//1. Roddelenie kódu do menších komponentov Filter a Tabuľka
+//2. Filter -> filtrovanie podľa kategorie, brand zmeniť na dropdown
+//3. Tabuľla -> urobiť sortovanie
+//4. Optimalizácia dopytov - teraz sa načítavajú všetky dáta. Paginácia a loader
+//5. UI/UX vylepšenia: pridávaním rôznych vizuálnych efektov, animácií alebo zlepšovaním použiteľnosti filtrov a tabuľky.
+//6.
