@@ -35,15 +35,9 @@ const Products = () => {
   useEffect(() => {
     // Aktualizácia filtrovaných dát pri zmene pôvodných dát
     const filteredData = data.filter((item) => {
-      const nameMatch = item.title
-        .toLowerCase()
-        .includes(filterTitle.toLowerCase());
-      const brandMatch = item.brand
-        .toLowerCase()
-        .includes(filterBrand.toLowerCase());
-      const categoryMatch = item.category
-        .toLowerCase()
-        .includes(filterCategory.toLowerCase());
+      const nameMatch = item.title?.toLowerCase().includes(filterTitle.toLowerCase()) ?? false;
+      const brandMatch = item.brand?.toLowerCase().includes(filterBrand.toLowerCase()) ?? false;
+      const categoryMatch = item.category?.toLowerCase().includes(filterCategory.toLowerCase()) ?? false;
       const priceMatch = item.price.toString().includes(filterPrice);
 
       return nameMatch && categoryMatch && priceMatch && brandMatch;
