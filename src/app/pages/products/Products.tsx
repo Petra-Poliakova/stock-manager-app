@@ -30,7 +30,7 @@ const Products = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  //console.log(data);
+  console.log(data);
 
   useEffect(() => {
     // Aktualizácia filtrovaných dát pri zmene pôvodných dát
