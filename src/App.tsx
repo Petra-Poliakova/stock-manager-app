@@ -9,8 +9,8 @@ import Contact from "./app/pages/support/Contact";
 import ContactForm from "./app/pages/support/ContactForm";
 import RootLayout from "./app/layouts/RootLayout";
 import SupportLayout from "./app/layouts/SupportLayout";
-import  ProductDetail from "./app/pages/products/ProductDetail";
-import {productDetailLoader} from "./app/pages/products/ProductDetail";
+import ProductDetail from "./app/pages/products/ProductDetail";
+import { productDetailLoader } from "./app/pages/products/ProductDetail";
 import ProductError from "./app/pages/products/ProductError";
 
 import NotFound from "./app/NotFound";

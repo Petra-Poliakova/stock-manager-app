@@ -1,0 +1,33 @@
+@import '../globalStyle.scss';
+
+.sidebar{
+    width: 15%; //225px
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $color-primary;
+
+    .logo {
+        padding: 27px 0 0;
+    }
+
+    .menu {
+        margin-top: 50px;
+        display: flex;
+        flex-direction: column;
+        .navItem {
+            width: 195px;
+            height: 41px;
+            display: flex;
+            flex-direction: row;
+            color:$color-white;
+            .icon{
+                color:$color-white;
+            };
+            .text{
+                color:$color-white;
+            }
+        }
+    }
+  }
