@@ -1,11 +1,15 @@
 import React from 'react';
 import { NavLink, Outlet } from "react-router-dom";
 import Logo from "../../assets/logo_svg.svg";
+import {ReactComponent as ProductIcon } from '../../assets/product.svg';
+import {ReactComponent as DashboardIcon } from '../../assets/dashboard.svg';
+import {ReactComponent as SupportIcon } from '../../assets/support.svg';
 
-//import "../../styles/globalStyle.scss";
 import "../../styles/layouts/RootLayout.scss"
 
-const RootLayout = () => {
+interface RootLayoutProps {}
+
+const RootLayout: React.FC<RootLayoutProps> = () => {
   return (
     <div style={{width:'100%', display:'flex', flexDirection:'row'}}>
     <div className='sidebar'>
@@ -13,39 +17,11 @@ const RootLayout = () => {
         <img src={Logo} alt="Logo" />
       </div>
       <nav className='menu'>
-          <NavLink to="/"><div className='navItem'><span className='icon'>i</span> Home</div></NavLink>
-          <NavLink to="/products"><div className='navItem'><span className='icon'>i</span> Products</div></NavLink>
-          <NavLink to="/support"><div className='navItem'><span className='icon'>i</span> Support</div></NavLink>
+          <NavLink to="/" className='navItem'><DashboardIcon style={{width:'24px', height:'24px'}} className='icon'/> Dashboard</NavLink>
+          <NavLink to="/products" className='navItem'><ProductIcon style={{width:'24px', height:'24px'}} className='icon'/>Products</NavLink>
+          <NavLink to="/support" className='navItem'><SupportIcon style={{width:'24px', height:'24px'}} className='icon'/> Support</NavLink>
       </nav>
     </div>
-    {/* <header>
-      <div className="logo-container">
-        <div className="logo">
-          <img src={Logo} alt="Logo" />
-        </div>
-      </div>
-
-      <nav className='rootNav'>
-        <NavLink
-          to="/"
-          className={({ isActive }) => (isActive ? "active" : "")}
-        >
-          Home
-        </NavLink>
-        <NavLink
-          to="/products"
-          className={({ isActive }) => (isActive ? "active" : "")}
-        >
-          Products
-        </NavLink>
-        <NavLink
-          to="/support"
-          className={({ isActive }) => (isActive ? "active" : "")}
-        >
-          Support
-        </NavLink>
-      </nav>
-    </header> */}
 
     <main style={{width:'85%'}}>
       <Outlet />

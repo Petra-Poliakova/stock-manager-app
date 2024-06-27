@@ -1,0 +1,74 @@
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    position: fixed; /* Fixed positioning to cover the viewport */
+    top: 0;
+    left: 0;
+    z-index: 9999; /* Ensure it's above other content if needed */
+    background-color: rgba(255, 255, 255, 0.7); /* Optional: semi-transparent background */
+}
+
+.spinner {
+    display: grid;
+    border: 4.5px solid #0000;
+    border-radius: 50%;
+    border-color: #dbdcef #0000;
+    animation: spinner-e04l1k 1s infinite linear;
+ }
+
+.spinner[data-size="small"] {
+    width: 24px;
+    height: 24px;
+}
+.spinner[data-size="medium"] {
+    width: 36px;
+    height: 36px;
+}
+.spinner[data-size="large"] {
+    width: 56px;
+    height: 56px;
+}
+
+ .spinner::before,
+ .spinner::after {
+    content: "";
+    grid-area: 1/1;
+    //margin: 2.2px;
+    border: inherit;
+    border-radius: 50%;
+ }
+
+.spinner[data-size="small"]::before,
+.spinner[data-size="small"]::after {
+  margin: 1.1px;
+}
+
+.spinner[data-size="medium"]::before,
+.spinner[data-size="medium"]::after {
+  margin: 1.65px;
+}
+
+.spinner[data-size="large"]::before,
+.spinner[data-size="large"]::after {
+  margin: 2.2px;
+}
+ 
+ .spinner::before {
+    border-color: #202e44 #0000;
+    animation: inherit;
+    animation-duration: 0.5s;
+    animation-direction: reverse;
+ }
+ 
+ .spinner::after {
+    margin: 8.9px;
+ }
+ 
+ @keyframes spinner-e04l1k {
+    100% {
+       transform: rotate(1turn);
+    }
+ }
