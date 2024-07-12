@@ -1,5 +1,6 @@
 import React from 'react'
-import LoadingSpinner from '../components/LoadingSpinner'
+import LoadingSpinner from '../../components/LoadingSpinner'
+import { Header } from '../../components/Header'
 
 
 import './../../styles/globalStyle.scss'
@@ -7,7 +8,7 @@ import './../../styles/globalStyle.scss'
 const HomePage = () => {
   return (
     <div className='container'>
-      <h1>Home Page</h1>
+      <Header title='Dashboard' userName='AV'></Header>
       </div>
   )
 }

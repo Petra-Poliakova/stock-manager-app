@@ -5,11 +5,12 @@ import {
   Route,
   RouterProvider, 
 } from "react-router-dom";
-import RootLayout from "./app/layouts/RootLayout";
-import SupportLayout from "./app/layouts/SupportLayout";
+import { MenuProvider } from "./context/MenuContext";
+import RootLayout from "./layouts/RootLayout";
+import SupportLayout from "./layouts/SupportLayout";
 import { productDetailLoader } from "./app/pages/products/ProductDetail";
 import "./styles/globalStyle.scss";
-import LoadingSpinner from "./app/components/LoadingSpinner"; 
+import LoadingSpinner from "./components/LoadingSpinner"; 
 
 const HomePage = lazy(() => import('./app/pages/HomePage'));
 const Product = lazy(() => import('./app/pages/products/Products'));
@@ -39,7 +40,11 @@ const router = createBrowserRouter(
 );
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <MenuProvider>
+      <RouterProvider router={router} />;
+    </MenuProvider>
+  )
 };
 
 export default App;

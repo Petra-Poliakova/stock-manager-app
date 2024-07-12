@@ -1,0 +1,41 @@
+@import '../styles/globalStyle.scss';
+
+.container {
+    width: 100%;
+    height: 65px;
+    display: flex;
+    flex-direction: row;
+    background-color: transparent;
+    align-items: center;
+    justify-content: space-between;
+
+    .header-left {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-left: 25px;
+        .menu-icon {
+            margin-right: 15px;
+            cursor: pointer;
+        }
+    
+        .title{
+            font-size: 20px;
+            color: $primary-color;
+            font-weight: bold;
+        }
+    }
+
+    .avatar{
+        margin-right: 40px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: $primary-color;
+        font-size: 16px;
+        color: $white-color;
+        text-transform: uppercase;
+        line-height: 36px;
+        text-align: center;
+    }
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
-import Filter from "../../components/Filter";
+import Filter from "../../../components/Filter";
 
 import "./../../../styles/globalStyle.scss";
 

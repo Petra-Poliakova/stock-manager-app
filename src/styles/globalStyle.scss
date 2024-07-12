@@ -27,6 +27,8 @@ $neutral-secondary200-color: #fafaf7;
  $color-neutral-secondary-light: #fafaf7;
  $color-text: #1B2A3F;
 
+ $color-light-grey:#F0F0F0;
+
 h1,
 h2,
 h3,
@@ -68,6 +70,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: $color-light-grey;
 }
 
 
