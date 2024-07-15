@@ -8,7 +8,7 @@
     background-color: $color-primary;
     padding: 25px 0 0;
     width: 207px;
-    transition: width 0.5s ease;
+    transition: width 0.3s ease;
 
     &.collapsed {
         width: 75px;
@@ -16,7 +16,7 @@
 
     .logo {
         width: 75px;
-        transition: width 0.5s ease;
+        transition: width 0.3s ease;
 
         &.collapsed {
             width: 50px;
@@ -59,7 +59,7 @@
                 opacity: 1;
                 visibility: visible;
                 margin-left: 50px;
-                transition: opacity 0.5s ease, visibility 0.5s ease;
+                transition: opacity 0.3s ease, visibility 0.3s ease;
 
                 &.collapsed {
                     opacity: 0;
