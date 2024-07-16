@@ -42,7 +42,7 @@ const router = createBrowserRouter(
 const App = () => {
   return (
     <MenuProvider>
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
     </MenuProvider>
   )
 };

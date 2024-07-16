@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 type TFetchResponse<T> = {
     status: number | null;
@@ -11,11 +11,7 @@ type TFetchResponse<T> = {
 //     method?: RequestInit['method'];
 //   };
 
-type TFetchOptions = RequestInit & {
-  method?: RequestInit['method'];
-  headers?: { "Content-Type": "application/json" },
-  
-};
+ type TFetchOptions = RequestInit;
 
   export const useFetch = <T>(url: string, options?: TFetchOptions): TFetchResponse<T> => {
   const [data, setData] = useState<T | null>(null);
@@ -24,29 +20,57 @@ type TFetchOptions = RequestInit & {
   const [status, setStatus] = useState<number | null>(null);
   const [statusText, setStatusText] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async (): Promise<void> => {
+  const optionsRef = useRef<TFetchOptions | undefined>(options);
+  const abortControllerRef = useRef<AbortController >();
+
+   const fetchData = useCallback(async (): Promise<void> => {
       setIsLoading(true);
+
+       abortControllerRef.current = new AbortController();
+       const { signal } = abortControllerRef.current;
+
       try {
+        const { method = 'GET', ...restOptions } = optionsRef.current || {};
         const response = await fetch(url, {
-          ...options || {},
-          method: (options && options.method) || 'GET',
+          method,
+          ...restOptions,
+          //...options,
+          //method: options?.method || 'GET',
+          signal,
         });
-        const json = await response.json();
-        setStatus(response.status);
-        setStatusText(response.statusText);
+          const json = await response.json();
+          setStatus(response.status);
+          setStatusText(response.statusText);
         
-        console.log(json); // <-- Pridajte tento riadok
-        setData(json);
-      } catch (error) {
-        setError(error instanceof Error ? error : new Error('Unknown error'));
+          console.log(json); 
+          setData(json);
+        
+      } catch (error: any) {
+        if(error.name !== 'AbortError') {
+          setError(error instanceof Error ? error : new Error('Unknown error'));
+        } 
+
       } finally {
         setIsLoading(false);
       }
+    },[url]);
+  
+  useEffect(() => {
+    if (JSON.stringify(optionsRef.current) !== JSON.stringify(options)) {
+      optionsRef.current = options;
+    }
+    fetchData();
+
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
     };
 
-    fetchData();
-  }, [url]);
+  }, [fetchData, options]);
 
   return { data, error, isLoading, status, statusText };
 };
+
+
+//https://github.com/cosdensolutions/code/blob/master/videos/long/data-fetching-complete-tutorial/index.tsx

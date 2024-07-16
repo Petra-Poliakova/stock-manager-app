@@ -12,14 +12,7 @@ type TData = {
 }
 
 const HomePage = () => {
-  const {data, error, isLoading} = useFetch<TData[]>('https://dummyjson.com/products/categories',
-     {
-    //method: 'GET',
-    // headers: {
-    //   'Content-Type': 'application/json',
-    // },
-  }
-)  
+  const {data, error, isLoading} = useFetch<TData[]>('https://dummyjson.com/products/categories',)  
 
   if (isLoading) {
     return <LoadingSpinner />
@@ -27,8 +20,10 @@ const HomePage = () => {
   if (error) {
     return <div>Error: {error.message}</div>
   }
+
+
   return (
-    <div className='container' style={{display: 'flex', flexDirection: 'column'}}>
+    <div >
       <Header title='Dashboard' userName='AV'></Header>
 
       <ul>
