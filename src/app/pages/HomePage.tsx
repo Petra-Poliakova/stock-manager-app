@@ -1,13 +1,44 @@
 import React from 'react'
 import { Header } from '../../components/Header'
+import { useFetch } from '../../hooks/useFetch'
+import LoadingSpinner from '../../components/LoadingSpinner'
 
 import './../../styles/globalStyle.scss'
 
+type TData = {
+    slug: string,
+    name: string,
+    url: string,
+}
+
 const HomePage = () => {
+  const {data, error, isLoading} = useFetch<TData[]>('https://dummyjson.com/products/categories',
+     {
+    //method: 'GET',
+    // headers: {
+    //   'Content-Type': 'application/json',
+    // },
+  }
+)  
+
+  if (isLoading) {
+    return <LoadingSpinner />
+  }
+  if (error) {
+    return <div>Error: {error.message}</div>
+  }
   return (
-    <div className='container'>
+    <div className='container' style={{display: 'flex', flexDirection: 'column'}}>
       <Header title='Dashboard' userName='AV'></Header>
-      </div>
+
+      <ul>
+        {data?.map((category) => (
+          <li key={category.slug}>
+            <a href={category.url}>{category.name}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
