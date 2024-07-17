@@ -7,11 +7,8 @@ type TFetchResponse<T> = {
     error: Error | null;
     isLoading: boolean;
 }
-// type TFetchOptions = Omit<RequestInit, 'method'> & {
-//     method?: RequestInit['method'];
-//   };
 
- type TFetchOptions = RequestInit;
+type TFetchOptions = RequestInit;
 
   export const useFetch = <T>(url: string, options?: TFetchOptions): TFetchResponse<T> => {
   const [data, setData] = useState<T | null>(null);
@@ -41,7 +38,7 @@ type TFetchResponse<T> = {
           const json = await response.json();
           setStatus(response.status);
           setStatusText(response.statusText);
-        
+
           console.log(json); 
           setData(json);
         
@@ -51,7 +48,9 @@ type TFetchResponse<T> = {
         } 
 
       } finally {
-        setIsLoading(false);
+        if (!signal.aborted) {
+          setIsLoading(false);
+        }
       }
     },[url]);
   
@@ -74,3 +73,4 @@ type TFetchResponse<T> = {
 
 
 //https://github.com/cosdensolutions/code/blob/master/videos/long/data-fetching-complete-tutorial/index.tsx
+//https://dev.to/sebastienlorber/handling-api-request-race-conditions-in-react-4j5b
