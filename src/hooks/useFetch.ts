@@ -39,7 +39,7 @@ type TFetchOptions = RequestInit;
           setStatus(response.status);
           setStatusText(response.statusText);
 
-          console.log(json); 
+          //console.log(json); 
           setData(json);
         
       } catch (error: any) {
