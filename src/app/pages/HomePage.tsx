@@ -30,6 +30,37 @@ const HomePage = () => {
   return (
     <div >
       <Header title='Dashboard' userName='AV'></Header>
+      <div className='box-container'>
+        <div className='box'>
+          <div className='box-text'>
+            <p></p>
+            <p></p>
+          </div>
+          <div className='box-icon'></div>
+        </div>
+        <div className='box'>
+          <div className='box-text'>
+            <p></p>
+            <p></p>
+          </div>
+          <div className='box-icon'></div>
+        </div>
+        <div className='box'>
+          <div className='box-text'>
+            <p></p>
+            <p></p>
+          </div>
+          <div className='box-icon'></div>
+        </div>
+        <div className='box'>
+          <div className='box-text'>
+            <p></p>
+            <p></p>
+          </div>
+          <div className='box-icon'></div>
+        </div>
+       
+      </div>
 
       <ul>
         {categories?.map((category) => (
