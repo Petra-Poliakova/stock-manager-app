@@ -1,12 +1,12 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 
-import '../app/pages/support/Contact';
-import '../app/pages/support/ContactForm'
+import 'app/pages/support/Contact';
+import 'app/pages/support/ContactForm'
 
-import './../styles/globalStyle.scss'
+import 'styles/globalStyle.scss'
 //import './../../styles/layouts/SupportLayout.scss'
-import './../styles/layouts/SupportLayout.scss'
+import 'styles/layouts/SupportLayout.scss'
 
 const SupportLayout = () => {
   return (

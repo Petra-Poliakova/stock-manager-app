@@ -1,24 +1,29 @@
 import React from 'react'
-import { Header } from '../../components/Header'
-import { useFetch } from '../../hooks/useFetch'
-import LoadingSpinner from '../../components/LoadingSpinner'
+import { Header } from 'components/Header'
+import { useFetch } from 'hooks/useFetch'
+import LoadingSpinner from 'components/LoadingSpinner'
 
-import './../../styles/globalStyle.scss'
+import { TData } from './products/Products'
 
-type TData = {
+import 'styles/globalStyle.scss'
+
+type TDataCategory = {
     slug: string,
     name: string,
     url: string,
 }
 
 const HomePage = () => {
-  const {data, error, isLoading} = useFetch<TData[]>('https://dummyjson.com/products/categories',)  
+  const {data, error, isLoading} = useFetch<TData[]>('https://dummyjson.com/products?limit=0',)
+  const {data: categories, error: errorCategories, isLoading: isLoadingCategories} = useFetch<TDataCategory[]>('https://dummyjson.com/products/categories',)  
 
-  if (isLoading) {
+  console.log('Data HP', data, categories)
+
+  if (isLoading || isLoadingCategories) {
     return <LoadingSpinner />
   }
-  if (error) {
-    return <div>Error: {error.message}</div>
+  if (error || errorCategories) {
+    return <div>Error: {error?.message}</div>
   }
 
 
@@ -27,7 +32,7 @@ const HomePage = () => {
       <Header title='Dashboard' userName='AV'></Header>
 
       <ul>
-        {data?.map((category) => (
+        {categories?.map((category) => (
           <li key={category.slug}>
             <a href={category.url}>{category.name}</a>
           </li>

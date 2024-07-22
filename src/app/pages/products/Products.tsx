@@ -1,9 +1,9 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
-import { Header } from '../../../components/Header'
-import Filter from "../../../components/Filter";
-import { useFetch } from "../../../hooks/useFetch";
-import LoadingSpinner from '../../../components/LoadingSpinner'
+import { Header } from 'components/Header'
+import Filter from "components/Filter";
+import { useFetch } from "hooks/useFetch";
+import LoadingSpinner from 'components/LoadingSpinner'
 
 import "./../../../styles/globalStyle.scss";
 

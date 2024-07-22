@@ -1,6 +1,6 @@
 import React from 'react'
-import { useMenu } from '../context/MenuContext'
-import { IMAGES } from '../constans/constans'
+import { useMenu } from 'context/MenuContext'
+import { IMAGES } from 'constans/constans'
 
 import { styled } from '@mui/material/styles';
 

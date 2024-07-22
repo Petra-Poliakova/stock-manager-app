@@ -1,6 +1,6 @@
 import React from 'react'
-import './../../../styles/globalStyle.scss'
-import './../../../styles/support/Contact.scss'
+import 'styles/globalStyle.scss'
+import 'styles/support/Contact.scss'
 import { FaMapMarkerAlt, FaPhone, FaFax, FaMailBulk } from 'react-icons/fa';
 
 const Contact = () => {
