@@ -1,0 +1,95 @@
+{
+    "sales": [
+      {
+        "saleId": 5,
+        "saleDate": "2024-07-01T08:12:34.567Z",
+        "quantitySold": 23,
+        "unitPrice": 8.99
+      },
+      {
+        "saleId": 9,
+        "saleDate": "2024-07-08T08:12:34.567Z",
+        "quantitySold": 34,
+        "unitPrice": 69.99
+      },
+      {
+        "saleId": 24,
+        "saleDate": "2024-07-09T08:12:34.567Z",
+        "quantitySold": 12,
+        "unitPrice": 14.99
+      },
+      {
+        "saleId": 31,
+        "saleDate": "2024-07-11T08:12:34.567Z",
+        "quantitySold": 45,
+        "unitPrice": 0.79
+      },
+      {
+        "saleId": 48,
+        "saleDate": "2024-07-15T08:12:34.567Z",
+        "quantitySold": 67,
+        "unitPrice": 4.85
+      },
+      {
+        "saleId": 57,
+        "saleDate": "2024-07-17T08:12:34.567Z",
+        "quantitySold": 19,
+        "unitPrice": 9.99
+      },
+      {
+        "saleId": 69,
+        "saleDate": "2024-07-19T08:12:34.567Z",
+        "quantitySold": 78,
+        "unitPrice": 3.99
+      },
+      {
+        "saleId": 88,
+        "saleDate": "2024-07-20T08:12:34.567Z",
+        "quantitySold": 56,
+        "unitPrice": 149.99
+      },
+      {
+        "saleId": 92,
+        "saleDate": "2024-07-23T08:12:34.567Z",
+        "quantitySold": 32,
+        "unitPrice": 109.99
+      },
+      {
+        "saleId": 101,
+        "saleDate": "2024-07-15T08:12:34.567Z",
+        "quantitySold": 21,
+        "unitPrice": 549.99
+      },
+      {
+        "saleId": 110,
+        "saleDate": "2024-07-07T08:12:34.567Z",
+        "quantitySold": 39,
+        "unitPrice": 14.99
+      },
+      {
+        "saleId": 125,
+        "saleDate": "2024-07-18T08:12:34.567Z",
+        "quantitySold": 44,
+        "unitPrice": 249.99
+      },
+      {
+        "saleId": 138,
+        "saleDate": "2024-07-24T08:12:34.567Z",
+        "quantitySold": 28,
+        "unitPrice": 8.99
+      },
+      {
+        "saleId": 143,
+        "saleDate": "2024-07-05T08:12:34.567Z",
+        "quantitySold": 37,
+        "unitPrice": 29.99
+      },
+      {
+        "saleId": 178,
+        "saleDate": "2024-07-31T08:12:34.567Z",
+        "quantitySold": 54,
+        "unitPrice": 89.99
+      }
+    ]
+  }
+  
