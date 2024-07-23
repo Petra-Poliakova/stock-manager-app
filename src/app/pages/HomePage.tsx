@@ -4,71 +4,67 @@ import { useFetch } from 'hooks/useFetch'
 import LoadingSpinner from 'components/LoadingSpinner'
 
 import { TData } from './products/Products'
+import { IMAGES } from 'constans/constans'
 
 import 'styles/globalStyle.scss'
-
-type TDataCategory = {
-    slug: string,
-    name: string,
-    url: string,
-}
+import './HomePage.scss'
 
 const HomePage = () => {
   const {data, error, isLoading} = useFetch<TData[]>('https://dummyjson.com/products?limit=0',)
-  const {data: categories, error: errorCategories, isLoading: isLoadingCategories} = useFetch<TDataCategory[]>('https://dummyjson.com/products/categories',)  
 
-  console.log('Data HP', data, categories)
+  console.log('Data HP', data)
 
-  if (isLoading || isLoadingCategories) {
+  if (isLoading) {
     return <LoadingSpinner />
   }
-  if (error || errorCategories) {
+  if (error) {
     return <div>Error: {error?.message}</div>
   }
 
 
   return (
-    <div >
+    <div className='page-container'>
       <Header title='Dashboard' userName='AV'></Header>
       <div className='box-container'>
         <div className='box'>
           <div className='box-text'>
-            <p></p>
-            <p></p>
+            <span>New sales</span>
+            <span>1.355</span>
           </div>
-          <div className='box-icon'></div>
+          <div className='box-icon'>
+            <IMAGES.ChartBar/>
+          </div>
         </div>
         <div className='box'>
           <div className='box-text'>
-            <p></p>
-            <p></p>
+            <span>New leads</span>
+            <span>2.830</span>
           </div>
-          <div className='box-icon'></div>
+          <div className='box-icon'>
+            <IMAGES.UserPlus/>
+          </div>
         </div>
         <div className='box'>
           <div className='box-text'>
-            <p></p>
-            <p></p>
+            <span>Income per leads</span>
+            <span>€1.910</span>
           </div>
-          <div className='box-icon'></div>
+          <div className='box-icon'>
+            <IMAGES.Money/>
+          </div>
         </div>
         <div className='box'>
           <div className='box-text'>
-            <p></p>
-            <p></p>
+            <span>Conversion rate</span>
+            <span>3.51%</span>
           </div>
-          <div className='box-icon'></div>
+          <div className='box-icon'>
+            <IMAGES.ChartLine/>
+          </div>
         </div>
        
       </div>
 
-      <ul>
-        {categories?.map((category) => (
-          <li key={category.slug}>
-            <a href={category.url}>{category.name}</a>
-          </li>
-        ))}
-      </ul>
     </div>
   )
 }

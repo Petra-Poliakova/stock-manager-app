@@ -70,12 +70,12 @@ const Products = () => {
   if (error) { return <div>Error: {error.message}</div> }
 
   return (
-    <>
+    <div className="page-container">
       <Header title='Products' userName='AV'></Header>
         <div className="table" style={{ width: "100%" }}>
           <table
             style={{
-              width: "95%",
+              width: "100%",
               borderCollapse: "collapse",
               margin: "25px auto",
             }}
@@ -109,7 +109,7 @@ const Products = () => {
             </tbody>
           </table>
         </div>
-    </>
+    </div>
   );
 };
 

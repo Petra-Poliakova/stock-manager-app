@@ -24,7 +24,7 @@ const ProductDetail = () => {
   const productId = useLoaderData() as DataType;
 
   return (
-    <div className="container">
+    <div className="page-container">
       <h1>Product detail</h1>
       <div className="productDetailContainer">
         <div className="iconArea">

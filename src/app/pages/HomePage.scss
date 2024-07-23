@@ -1,0 +1,32 @@
+@import '../../styles/globalStyle.scss';
+
+    .box-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap:25px;
+        .box {
+            width: 25%;
+            height: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 10px;
+            padding: 25px;
+            background-color: $white-color;
+            .box-text{
+                display: flex;
+                flex-direction: column;
+                span {
+                    color: #666666;
+                }
+                span:last-child{
+                    color: $primary-color;
+                    font-weight: bold;
+                    font-size: 20px;
+                }
+            }
+        }
+    }
+
