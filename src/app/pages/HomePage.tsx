@@ -1,9 +1,10 @@
 import React from 'react'
 import { Header } from 'components/Header'
 import { useFetch } from 'hooks/useFetch'
-import { ChartData, ChartOptions} from 'chart.js/auto'
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { ChartData, ChartOptions, Plugin} from 'chart.js/auto'
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, } from 'chart.js';
 import {Bar} from 'react-chartjs-2'
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
 import LoadingSpinner from 'components/LoadingSpinner'
 
@@ -49,31 +50,17 @@ const HomePage = () => {
   const uniqueProductTitles = lowStockProducts?.map(product => product.title) || [];
   const uniqueProductStocks = lowStockProducts?.map(product => product.stock) || [];
   //const uniqueProductTitles = Array.from(new Set(lowStockProducts?.map(product => product.title) || [])); //pre odstránenie duplikátov
-  
-  // Vytvorenie datasetov
-  // const datasets = uniqueProductTitles.map((title, index) => {
-  //   return {
-  //     label: title,
-  //     data: lowStockProducts?.filter(product => product.title === title).map(product => product.stock) || [],
-  //     backgroundColor: colorPalette[index % colorPalette.length],
-  //   };
-  // });
-
-  
-  // const chartData: ChartData<'bar'> = {
-  //     labels: uniqueProductTitles,
-  //     datasets: datasets
-  //   };
 
   const chartData: ChartData<'bar'> = {
     labels: uniqueProductTitles || [],
     datasets: [
       {
-        label: 'Stock',
+        label: 'Quantity',
         data: uniqueProductStocks || [],
         backgroundColor: colorPalette,
       },
     ],
+    
   };
 
   const chartOption: ChartOptions<'bar'> = {
@@ -82,70 +69,92 @@ const HomePage = () => {
       x: {
         beginAtZero: true,
         ticks: {
-          display: false, 
+          display: false,
         },
       },
       y: {
         beginAtZero: true,
       },
     },
-    // plugins: {
-    //   legend: {
-    //     position:'top' as const,
-    //   },
-    // }
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: false,
+        text: "Quantity in stock",
+      },
+      // datalabels: {
+      //   display: true,
+      //   formatter: (value: any, context: any) => {
+      //     return context.chart.data.labels[context.dataIndex];
+      //     return context.dataset.data[context.dataIndex].label
+      //   },
+      //   labels: {
+      //     value: {
+      //         color: 'white'
+      //     }
+      // },
+      //},
+    },
   };
 
   return (
-    <div className='page-container'>
-      <Header title='Dashboard' userName='AV'></Header>
-      <div className='box-container'>
-        <div className='box'>
-          <div className='box-text'>
+    <div className="page-container">
+      <Header title="Dashboard" userName="AV"></Header>
+      <div className="box-container">
+        <div className="box">
+          <div className="box-text">
             <span>New sales</span>
-            <span>{(getFormatNumberWithDot(Math.floor(totalSalesQuantity)))}</span>
+            <span>
+              {getFormatNumberWithDot(Math.floor(totalSalesQuantity))}
+            </span>
           </div>
-          <div className='box-icon'>
-            <IMAGES.ChartBar/>
+          <div className="box-icon">
+            <IMAGES.ChartBar />
           </div>
         </div>
-        <div className='box'>
-          <div className='box-text'>
+        <div className="box">
+          <div className="box-text">
             <span>New sales revenue</span>
-            <span>€{(getFormatNumberWithDot(Math.floor(totalSalesRevenue)))}</span>
+            <span>
+              €{getFormatNumberWithDot(Math.floor(totalSalesRevenue))}
+            </span>
           </div>
-          <div className='box-icon'>
-            <IMAGES.Money/>
+          <div className="box-icon">
+            <IMAGES.Money />
           </div>
         </div>
-        <div className='box'>
-          <div className='box-text'>
+        <div className="box">
+          <div className="box-text">
             <span>Revenue per unit</span>
-            <span>{getFormatNumberWithDot(Math.floor(averageRevenuePerUnit))}%</span>
+            <span>
+              {getFormatNumberWithDot(Math.floor(averageRevenuePerUnit))}%
+            </span>
           </div>
-          <div className='box-icon'>
-            <IMAGES.ChartLine/>
+          <div className="box-icon">
+            <IMAGES.ChartLine />
           </div>
         </div>
-        <div className='box'>
-          <div className='box-text'>
+        <div className="box">
+          <div className="box-text">
             <span>New leads</span>
             <span>2.830</span>
           </div>
-          <div className='box-icon'>
-            <IMAGES.UserPlus/>
+          <div className="box-icon">
+            <IMAGES.UserPlus />
           </div>
         </div>
       </div>
-      <div className='chart-container'>
-        <div className='title'>Low stock products</div>
-        <div className='chart'>
-          <Bar data={chartData} options={chartOption} />
-        </div>
-        
+      <div className="chart-box">
+        <div className="title">Low stock products</div>
+          <div className="chart">
+            {/* <Bar data={chartData} options={chartOption} plugins={[ChartDataLabels as Plugin<'bar'>]} /> */}
+            <Bar data={chartData} options={chartOption} />
+          </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default HomePage
