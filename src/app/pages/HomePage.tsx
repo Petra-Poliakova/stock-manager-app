@@ -1,6 +1,10 @@
 import React from 'react'
 import { Header } from 'components/Header'
 import { useFetch } from 'hooks/useFetch'
+import { ChartData, ChartOptions} from 'chart.js/auto'
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import {Bar} from 'react-chartjs-2'
+
 import LoadingSpinner from 'components/LoadingSpinner'
 
 import { TData } from './products/Products'
@@ -11,11 +15,11 @@ import salesData from 'data/sales.json'
 import 'styles/globalStyle.scss'
 import './HomePage.scss'
 
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
 const HomePage = () => {
   const {data, error, isLoading} = useFetch<TData>('https://dummyjson.com/products?limit=0',)
 
-  console.log('Data HP', data)
-  
   if (isLoading) {
     return <LoadingSpinner />
   }
@@ -31,9 +35,66 @@ const HomePage = () => {
   const totalSalesRevenue = salesData.sales.map(item => item.unitPrice * item.quantitySold).reduce((a, b) => a + b, 0);
   const averageRevenuePerUnit = (totalSalesRevenue / totalSalesQuantity) * 100;
 
-  //const inStockProducts = data?.products.filter(product => product.availabilityStatus === 'In Stock');
+  const colorPalette = [
+    "#80b1cc", "#d8f6e1", "#325da9",
+    "#addcda", "#4e78b5", "#c0eade",
+    "#6694c1", "#00429d", "#73a2c6",
+    "#8ebfd1", "#9dced6", "#406aaf",
+    "#ffffe0", "#5a86bb", "#204fa3",
+  ];
+
+  //https://www.vis4.net/palettes/#/15|s|00429d,96ffea,ffffe0|ffffe0,ff005e,93003a|1|1
+
   const lowStockProducts = data?.products.filter(product => product.availabilityStatus === 'Low Stock');
-  //const outOfStockProducts = data?.products.filter(product => product.availabilityStatus === 'Out of Stock');
+  const uniqueProductTitles = lowStockProducts?.map(product => product.title) || [];
+  const uniqueProductStocks = lowStockProducts?.map(product => product.stock) || [];
+  //const uniqueProductTitles = Array.from(new Set(lowStockProducts?.map(product => product.title) || [])); //pre odstránenie duplikátov
+  
+  // Vytvorenie datasetov
+  // const datasets = uniqueProductTitles.map((title, index) => {
+  //   return {
+  //     label: title,
+  //     data: lowStockProducts?.filter(product => product.title === title).map(product => product.stock) || [],
+  //     backgroundColor: colorPalette[index % colorPalette.length],
+  //   };
+  // });
+
+  
+  // const chartData: ChartData<'bar'> = {
+  //     labels: uniqueProductTitles,
+  //     datasets: datasets
+  //   };
+
+  const chartData: ChartData<'bar'> = {
+    labels: uniqueProductTitles || [],
+    datasets: [
+      {
+        label: 'Stock',
+        data: uniqueProductStocks || [],
+        backgroundColor: colorPalette,
+      },
+    ],
+  };
+
+  const chartOption: ChartOptions<'bar'> = {
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        beginAtZero: true,
+        ticks: {
+          display: false, 
+        },
+      },
+      y: {
+        beginAtZero: true,
+      },
+    },
+    // plugins: {
+    //   legend: {
+    //     position:'top' as const,
+    //   },
+    // }
+  };
 
   return (
     <div className='page-container'>
@@ -75,8 +136,13 @@ const HomePage = () => {
             <IMAGES.UserPlus/>
           </div>
         </div>
+      </div>
+      <div className='chart-container'>
+        <div className='title'>Low stock products</div>
+        <div className='chart'>
+          <Bar data={chartData} options={chartOption} />
+        </div>
         
-       
       </div>
     </div>
   )
