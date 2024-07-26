@@ -1,10 +1,9 @@
 import React from 'react'
 import { Header } from 'components/Header'
 import { useFetch } from 'hooks/useFetch'
-import { ChartData, ChartOptions, Plugin} from 'chart.js/auto'
+import { ChartData, ChartOptions} from 'chart.js/auto'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, } from 'chart.js';
 import {Bar} from 'react-chartjs-2'
-import ChartDataLabels from "chartjs-plugin-datalabels";
 
 import LoadingSpinner from 'components/LoadingSpinner'
 
@@ -15,6 +14,16 @@ import salesData from 'data/sales.json'
 
 import 'styles/globalStyle.scss'
 import './HomePage.scss'
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+
+type RowType = {
+  id: number,
+  title: string,
+  rating: number,
+  price: number,
+  quantity: number,
+  
+};
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -78,7 +87,7 @@ const HomePage = () => {
     },
     plugins: {
       legend: {
-        display: false,
+        display: true,
       },
       title: {
         display: false,
@@ -99,6 +108,18 @@ const HomePage = () => {
     },
   };
 
+  const rows: RowType[] = data?.products.filter(product => product.rating > 4.5).sort((a, b) => b.rating - a.rating).slice(0, 6).map(product =>{
+    return {
+      id: product.id,
+      title: product.title,
+      rating: product.rating,
+      price: product.price,
+      quantity: product.stock
+    }
+  }) ?? [];
+  console.log('topRatingProducts', rows);
+
+  
   return (
     <div className="page-container">
       <Header title="Dashboard" userName="AV"></Header>
@@ -148,10 +169,41 @@ const HomePage = () => {
       </div>
       <div className="chart-box">
         <div className="title">Low stock products</div>
-          <div className="chart">
-            {/* <Bar data={chartData} options={chartOption} plugins={[ChartDataLabels as Plugin<'bar'>]} /> */}
-            <Bar data={chartData} options={chartOption} />
-          </div>
+        <div className="chart">
+          {/* <Bar data={chartData} options={chartOption} plugins={[ChartDataLabels as Plugin<'bar'>]} /> */}
+          <Bar data={chartData} options={chartOption} />
+        </div>
+      </div>
+      <div className="top-rating-table">
+        <div className="title">Top rating products</div>
+        <TableContainer component={Paper} sx={{ width: "100%", boxShadow: "none" }}>
+          <Table aria-label="simple table" sx={{padding:'0 25px 25px', borderCollapse: "separate"}}>
+            <TableHead >
+              <TableRow>
+                <TableCell sx={{color:'#8c8c8c'}}>Name</TableCell>
+                <TableCell sx={{color:'#8c8c8c'}}>Price (€)</TableCell>
+                <TableCell sx={{color:'#8c8c8c'}}>Quantity (pcs)</TableCell>
+                <TableCell sx={{color:'#8c8c8c'}}>Rating</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  //sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  sx={{ 'td, th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.title}
+                  </TableCell>
+                  <TableCell>{row.price}</TableCell>
+                  <TableCell>{row.quantity}</TableCell>
+                  <TableCell>{row.rating}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </div>
   );
