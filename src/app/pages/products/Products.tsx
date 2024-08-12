@@ -5,6 +5,10 @@ import Filter from "components/Filter";
 import { useFetch } from "hooks/useFetch";
 import LoadingSpinner from 'components/LoadingSpinner';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import Button from '@mui/material/Button';
+import { FaRegTrashAlt } from "react-icons/fa";
+import { LuDownloadCloud } from "react-icons/lu";
+import { FiPlus } from "react-icons/fi";
 
 import "./../../../styles/globalStyle.scss";
 import "../../../styles/products/Products.scss";
@@ -63,15 +67,15 @@ export type TData = {
 }
 
 const Products = () => {
+  const [selectionProducts, setSelectionProducts] = useState<number[]>([]);
 
   const {data, error, isLoading} = useFetch<TData>('https://dummyjson.com/products?limit=0',)
+  //const { data: dataDelete, error: errorDelete, isLoading: isLoadingDelete } = useFetch<TProducts>(`https://dummyjson.com/products/${id}`, { method: 'DELETE' })
 
-
-  if (isLoading) { return <LoadingSpinner /> }
-  if (error) { return <div>Error: {error.message}</div> }
+  const rows = useMemo(() => data?.products.map(product => product as TProducts) ?? [], [data]);
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', headerClassName: 'header-class', width: 70 },
+    { field: 'id', headerName: 'ID', headerClassName: 'header-class', width: 70, filterable: false },
     { field: 'title', headerName: 'Title', headerClassName: 'header-class', flex: 2, cellClassName: 'title',
       renderCell: (params) => (
         <Link to={`/products/${params.id.toString()}`} onClick={(event) => event.stopPropagation()}>{params.value}</Link>
@@ -82,7 +86,30 @@ const Products = () => {
     { field: 'price', headerName: 'Price ( € )', headerClassName: 'header-class', flex: 1, cellClassName: 'price' },
   ];
 
-  const rows = data?.products.map(product => product as TProducts) ?? [];
+  
+
+  const handleDeleteProducts = async () => {
+    if (selectionProducts.length === 0) {
+      alert("Please select at least one product to delete.");
+      return;
+    }
+
+    try {
+      const deletePromises = selectionProducts.map(async (productId) => {
+        const url = `https://dummyjson.com/products/${productId}`;
+        const response = await fetch(url, { method: 'DELETE' });
+        const result = await response.json();
+        alert(`Deleted product with ID ${productId}:`);
+      });
+
+      await Promise.all(deletePromises);
+    } catch (error) {
+      console.error("Error deleting products:", error);
+    }
+  };
+
+  if (isLoading) { return <LoadingSpinner /> }
+  if (error) { return <div>Error: {error.message}</div> }
 
   return (
     <div className="page-container">
@@ -95,12 +122,59 @@ const Products = () => {
           alignItems: "center",
         }}
       >
-        <div style={{ width: "100%" , display: "flex", justifyContent: "space-between", alignItems: "center", margin:'25px'}}>
-          <div>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              padding: "25px",
+            }}
+          >
             <div className="title-box">Overview</div>
             <div>Quickly access product details directly from the table.</div>
           </div>
-          <div>Buttons</div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              padding: "25px",
+              gap: "10px",
+            }}
+          >
+            <Button
+              variant="text"
+              style={{ color: "#202e44", textTransform: "none" }}
+              startIcon={<FaRegTrashAlt size={15} />}
+              onClick={handleDeleteProducts}
+            >
+              Delete
+            </Button>
+            <Button
+              variant="outlined"
+              style={{ color: "#202e44", textTransform: "none" }}
+              startIcon={<LuDownloadCloud size={15} />}
+            >
+              Export
+            </Button>
+            <Button
+              variant="contained"
+              style={{
+                color: "#fff",
+                textTransform: "none",
+                backgroundColor: "#8b734c",
+              }}
+              startIcon={<FiPlus size={15} />}
+            >
+              Add new
+            </Button>
+          </div>
         </div>
 
         <div style={{ width: "100%" }}>
@@ -115,6 +189,9 @@ const Products = () => {
             }}
             pageSizeOptions={[10, 20, 30]}
             checkboxSelection
+            onRowSelectionModelChange = {(ids) => {
+              setSelectionProducts(ids as number[]);
+            }}
             sx={{
               "& .header-class": {
                 backgroundColor: "#FCFCFD",
@@ -138,8 +215,5 @@ export default Products;
 
 //TODO
 // 1. Add error handling  
-// 2. Add loading spinner
-// 3. Add filter
-// 4. Add pagination
-// 5. Add sorting
-// 6. Add images
+// 2. Add filter
+
