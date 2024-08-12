@@ -1,11 +1,13 @@
-import React, { useEffect, useState, ChangeEvent } from "react";
+import React, { useEffect, useState, ChangeEvent, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Header } from 'components/Header'
 import Filter from "components/Filter";
 import { useFetch } from "hooks/useFetch";
-import LoadingSpinner from 'components/LoadingSpinner'
+import LoadingSpinner from 'components/LoadingSpinner';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import "./../../../styles/globalStyle.scss";
+import "../../../styles/products/Products.scss";
 
 export type TReview = {
   rating: number;
@@ -62,53 +64,72 @@ export type TData = {
 
 const Products = () => {
 
-  const {data, error, isLoading} = useFetch<TData>('https://dummyjson.com/products',)
+  const {data, error, isLoading} = useFetch<TData>('https://dummyjson.com/products?limit=0',)
 
-  console.log('data', data)
 
   if (isLoading) { return <LoadingSpinner /> }
   if (error) { return <div>Error: {error.message}</div> }
 
+  const columns: GridColDef[] = [
+    { field: 'id', headerName: 'ID', headerClassName: 'header-class', width: 70 },
+    { field: 'title', headerName: 'Title', headerClassName: 'header-class', flex: 2, cellClassName: 'title',
+      renderCell: (params) => (
+        <Link to={`/products/${params.id.toString()}`} onClick={(event) => event.stopPropagation()}>{params.value}</Link>
+      )
+     },
+    { field: 'brand', headerName: 'Brand', headerClassName: 'header-class', flex: 1 },
+    { field: 'category', headerName: 'Category', headerClassName: 'header-class', flex: 1 },
+    { field: 'price', headerName: 'Price ( € )', headerClassName: 'header-class', flex: 1, cellClassName: 'price' },
+  ];
+
+  const rows = data?.products.map(product => product as TProducts) ?? [];
+
   return (
     <div className="page-container">
-      <Header title='Products' userName='AV'></Header>
-        <div className="table" style={{ width: "100%" }}>
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              margin: "25px auto",
-            }}
-          >
-            <thead>
-              <tr>
-                <th className="tableHeaderStyle">Id</th>
-                <th className="tableHeaderStyle">Title</th>
-                <th className="tableHeaderStyle">Brand</th>
-                <th className="tableHeaderStyle">Category</th>
-                <th className="tableHeaderStyle">Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.products?.map((item, index) => (
-                <tr key={index}>
-                  <td className="tableCellStyle">
-                    <Link to={item.id.toString()}>{item.id}</Link>
-                  </td>
-                  <td className="tableCellStyle">{item.title}</td>
-                  <td className="tableCellStyle">{item.brand}</td>
-                  <td className="tableCellStyle">{item.category}</td>
-                  <td
-                    className="tableCellStyle"
-                    style={{ color: "#8b734c", fontWeight: "bold" }}
-                  >
-                    € {item.price}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <Header title="Products" userName="AV"></Header>
+      <div
+        className="table-container"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ width: "100%" , display: "flex", justifyContent: "space-between", alignItems: "center", margin:'25px'}}>
+          <div>
+            <div className="title-box">Overview</div>
+            <div>Quickly access product details directly from the table.</div>
+          </div>
+          <div>Buttons</div>
         </div>
+
+        <div style={{ width: "100%" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            autoHeight
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 10 },
+              },
+            }}
+            pageSizeOptions={[10, 20, 30]}
+            checkboxSelection
+            sx={{
+              "& .header-class": {
+                backgroundColor: "#FCFCFD",
+                color: "#667085",
+                fontWeight: "bold",
+              },
+              "& .MuiDataGrid-columnHeaderCheckbox": {
+                backgroundColor: "#FCFCFD",
+                color: "#667085",
+                fontWeight: "bold",
+              },
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 };
@@ -116,9 +137,9 @@ const Products = () => {
 export default Products;
 
 //TODO
-//1. Roddelenie kódu do menších komponentov Filter a Tabuľka
-//2. Filter -> filtrovanie podľa kategorie, brand zmeniť na dropdown
-//3. Tabuľla -> urobiť sortovanie
-//4. Optimalizácia dopytov - teraz sa načítavajú všetky dáta. Paginácia a loader
-//5. UI/UX vylepšenia: pridávaním rôznych vizuálnych efektov, animácií alebo zlepšovaním použiteľnosti filtrov a tabuľky.
-//6.
+// 1. Add error handling  
+// 2. Add loading spinner
+// 3. Add filter
+// 4. Add pagination
+// 5. Add sorting
+// 6. Add images
