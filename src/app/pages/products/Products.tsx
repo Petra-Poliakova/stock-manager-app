@@ -1,14 +1,16 @@
-import React, { useEffect, useState, ChangeEvent, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Header } from 'components/Header'
 import Filter from "components/Filter";
 import { useFetch } from "hooks/useFetch";
 import LoadingSpinner from 'components/LoadingSpinner';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import { FaRegTrashAlt } from "react-icons/fa";
 import { LuDownloadCloud } from "react-icons/lu";
 import { FiPlus } from "react-icons/fi";
+
+import { utils, writeFile } from 'xlsx';
 
 import "./../../../styles/globalStyle.scss";
 import "../../../styles/products/Products.scss";
@@ -66,13 +68,43 @@ export type TData = {
   limit: number,
 }
 
+type FlatObject = { [key: string]: any };
+
+const flattenObject = (obj: FlatObject, parent: string = '', res: FlatObject = {}): FlatObject => {
+  for (let key in obj) {
+      const propName = parent ? `${parent}.${key}` : key;
+
+      if (Array.isArray(obj[key])) {
+        if (typeof obj[key][0] === 'object') {
+          obj[key].forEach((item: FlatObject, index: number) => {
+              flattenObject(item, `${propName}[${index}]`, res);
+          });
+      } else {
+          res[propName] = obj[key].join(', ');
+      }
+          // res[propName] = obj[key].map((item: any) => 
+          //     typeof item === 'object' ? JSON.stringify(item) : item
+          // ).join(', ');
+          
+      } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+          flattenObject(obj[key], propName, res);
+      } else {
+          res[propName] = obj[key];
+      }
+  }
+  return res;
+};
+
 const Products = () => {
-  const [selectionProducts, setSelectionProducts] = useState<number[]>([]);
+  const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
 
   const {data, error, isLoading} = useFetch<TData>('https://dummyjson.com/products?limit=0',)
   //const { data: dataDelete, error: errorDelete, isLoading: isLoadingDelete } = useFetch<TProducts>(`https://dummyjson.com/products/${id}`, { method: 'DELETE' })
 
   const rows = useMemo(() => data?.products.map(product => product as TProducts) ?? [], [data]);
+  const selectedProducts = useMemo(() => { return rows.filter(product => rowSelectionModel.includes(product.id)); }, [rowSelectionModel, rows]); //lepsi pre vykon, jednoduchost a presnost
+  //const selectedProducts = useMemo(() => rowSelectionModel.map(id => rows.find(row => row.id === id) as TProducts), [rowSelectionModel, rows]) // ak rowSelectionModel obsahuje v ID ktore nie su v rows, vrati undefined. Moze dojst k neocakavanemu spravaniu alebo je nutnost dalsieho osetrenia. Uzitocny, ked chcem zachovat presne poradie
+  
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', headerClassName: 'header-class', width: 70, filterable: false },
@@ -86,20 +118,19 @@ const Products = () => {
     { field: 'price', headerName: 'Price ( € )', headerClassName: 'header-class', flex: 1, cellClassName: 'price' },
   ];
 
-  
-
   const handleDeleteProducts = async () => {
-    if (selectionProducts.length === 0) {
+    if (selectedProducts.length === 0) {
       alert("Please select at least one product to delete.");
       return;
     }
 
     try {
-      const deletePromises = selectionProducts.map(async (productId) => {
-        const url = `https://dummyjson.com/products/${productId}`;
+      const deletePromises = selectedProducts.map(async (product) => {
+        const url = `https://dummyjson.com/products/${product.id}`;
         const response = await fetch(url, { method: 'DELETE' });
         const result = await response.json();
-        alert(`Deleted product with ID ${productId}:`);
+        alert(`Deleted product with ID ${product.id}: ${product.title}`);
+        setRowSelectionModel([]);
       });
 
       await Promise.all(deletePromises);
@@ -107,6 +138,22 @@ const Products = () => {
       console.error("Error deleting products:", error);
     }
   };
+
+  const hnandleExportProducts = () => {
+    if (selectedProducts.length === 0) {
+      alert("Please select at least one product to export.");
+      return;
+    }
+
+    const flatData = selectedProducts.map(product => flattenObject(product) as TProducts);
+
+    let wb = utils.book_new();
+    //let ws = utils.json_to_sheet(selectedProducts);
+    let ws = utils.json_to_sheet(flatData);
+    utils.book_append_sheet(wb, ws, "Products");
+    writeFile(wb, "products.xlsx");
+    console.log('selectedProducts', selectedProducts)
+  }
 
   if (isLoading) { return <LoadingSpinner /> }
   if (error) { return <div>Error: {error.message}</div> }
@@ -160,6 +207,7 @@ const Products = () => {
               variant="outlined"
               style={{ color: "#202e44", textTransform: "none" }}
               startIcon={<LuDownloadCloud size={15} />}
+              onClick={hnandleExportProducts}
             >
               Export
             </Button>
@@ -190,8 +238,11 @@ const Products = () => {
             pageSizeOptions={[10, 20, 30]}
             checkboxSelection
             onRowSelectionModelChange = {(ids) => {
-              setSelectionProducts(ids as number[]);
+              setRowSelectionModel(ids);
+              //const selectedRows = rows.filter(row => ids.includes(row.id));
+              //console.log('selectedRows', selectedRows);
             }}
+            rowSelectionModel={rowSelectionModel}
             sx={{
               "& .header-class": {
                 backgroundColor: "#FCFCFD",
