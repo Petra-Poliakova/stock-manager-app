@@ -65,7 +65,7 @@ const HomePage = () => {
     datasets: [
       {
         label: 'Quantity',
-        data: uniqueProductStocks || [],
+        data: uniqueProductStocks.filter(stock => stock !== undefined).map(stock => stock ?? 0),
         backgroundColor: colorPalette,
       },
     ],
@@ -108,13 +108,13 @@ const HomePage = () => {
     },
   };
 
-  const rows: RowType[] = data?.products.filter(product => product.rating > 4.5).sort((a, b) => b.rating - a.rating).slice(0, 6).map(product =>{
+  const rows: RowType[] = data?.products.filter(product => product.rating !== undefined && product.rating > 4.5).sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0)).slice(0, 6).map(product =>{
     return {
       id: product.id,
       title: product.title,
-      rating: product.rating,
-      price: product.price,
-      quantity: product.stock
+      rating: product.rating ?? 0,
+      price: product.price ?? 0,
+      quantity: product.stock ?? 0,
     }
   }) ?? [];
   console.log('topRatingProducts', rows);

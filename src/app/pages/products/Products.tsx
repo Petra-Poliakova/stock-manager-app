@@ -6,6 +6,12 @@ import { useFetch } from "hooks/useFetch";
 import LoadingSpinner from 'components/LoadingSpinner';
 import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import { FaRegTrashAlt } from "react-icons/fa";
 import { LuDownloadCloud } from "react-icons/lu";
 import { FiPlus } from "react-icons/fi";
@@ -39,26 +45,26 @@ export type TMeta = {
 export type TProducts = {
   id: number;
   title: string;
-  description: string;
-  category: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  tags: string[];
-  brand: string;
-  sku: string;
-  weight: number;
-  dimensions: TDimensions;
-  warrantyInformation: string;
-  shippingInformation: string;
-  availabilityStatus: string;
-  reviews: TReview[];
-  returnPolicy: string;
-  minimumOrderQuantity: number;
-  meta: TMeta;
-  images: string[];
-  thumbnail: string;
+  description?: string;
+  category?: string;
+  price?: number;
+  discountPercentage?: number;
+  rating?: number;
+  stock?: number;
+  tags?: string[];
+  brand?: string;
+  sku?: string;
+  weight?: number;
+  dimensions?: TDimensions;
+  warrantyInformation?: string;
+  shippingInformation?: string;
+  availabilityStatus?: string;
+  reviews?: TReview[];
+  returnPolicy?: string;
+  minimumOrderQuantity?: number;
+  meta?: TMeta;
+  images?: string[];
+  thumbnail?: string;
 };
 
 export type TData = {
@@ -97,9 +103,12 @@ const flattenObject = (obj: FlatObject, parent: string = '', res: FlatObject = {
 
 const Products = () => {
   const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+  const [open, setOpen] = useState<boolean>(false);
+  //const [addedProduct, setAddedProduct] = useState<TProducts | null>(null);
 
   const {data, error, isLoading} = useFetch<TData>('https://dummyjson.com/products?limit=0',)
-  //const { data: dataDelete, error: errorDelete, isLoading: isLoadingDelete } = useFetch<TProducts>(`https://dummyjson.com/products/${id}`, { method: 'DELETE' })
+  //const {doFetch: doFetchAdd, error: errorAdd, isLoading: isLoadingAdd } = useFetch('https://dummyjson.com/products/add', { method: 'POST' })
+  //const {doFetch: doFetchDelete, error: errorDelete, isLoading: isLoadingDelete } = useFetch<TProducts>(`https://dummyjson.com/products/${id}`, { method: 'DELETE' })
 
   const rows = useMemo(() => data?.products.map(product => product as TProducts) ?? [], [data]);
   const selectedProducts = useMemo(() => { return rows.filter(product => rowSelectionModel.includes(product.id)); }, [rowSelectionModel, rows]); //lepsi pre vykon, jednoduchost a presnost
@@ -154,6 +163,45 @@ const Products = () => {
     writeFile(wb, "products.xlsx");
     console.log('selectedProducts', selectedProducts)
   }
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleAddProduct = async (newProduct: TProducts) => {
+    try {
+      const response = await fetch('https://dummyjson.com/products/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newProduct),
+      })
+      .then(response => response.json())
+      .then(console.log);
+      handleClose()
+    } catch (error) {
+      console.error("Error adding product:", error);
+    }
+  }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const formJson = Object.fromEntries(formData.entries());
+
+    const newProduct: TProducts = {
+      id: 0, // Dočasná hodnota, bude vygenerovaná backendom
+      title: formJson.title as string,
+      brand: formJson.brand as string,
+      category: formJson.category as string,
+      
+    };
+
+    handleAddProduct(newProduct);
+  };
 
   if (isLoading) { return <LoadingSpinner /> }
   if (error) { return <div>Error: {error.message}</div> }
@@ -219,11 +267,58 @@ const Products = () => {
                 backgroundColor: "#8b734c",
               }}
               startIcon={<FiPlus size={15} />}
+              onClick={handleClickOpen}
             >
               Add new
             </Button>
           </div>
         </div>
+
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            component: "form",
+            onSubmit: handleSubmit,
+          }}
+        >
+          <DialogTitle>Create new product</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please fill in the following details to add a new product to the
+              catalog. Ensure all required fields are completed accurately.
+            </DialogContentText>
+            <TextField
+              required
+              margin="dense"
+              id="title"
+              name="title"
+              label="Product Title"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              margin="dense"
+              id="brand"
+              name="brand"
+              label="Brand"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              margin="dense"
+              id="category"
+              name="category"
+              label="Category"
+              fullWidth
+              variant="standard"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit">Save</Button>
+          </DialogActions>
+        </Dialog>
 
         <div style={{ width: "100%" }}>
           <DataGrid
@@ -237,7 +332,7 @@ const Products = () => {
             }}
             pageSizeOptions={[10, 20, 30]}
             checkboxSelection
-            onRowSelectionModelChange = {(ids) => {
+            onRowSelectionModelChange={(ids) => {
               setRowSelectionModel(ids);
               //const selectedRows = rows.filter(row => ids.includes(row.id));
               //console.log('selectedRows', selectedRows);
