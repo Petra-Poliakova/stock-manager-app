@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { Header } from 'components/Header'
 import Filter from "components/Filter";
@@ -20,6 +20,8 @@ import { utils, writeFile } from 'xlsx';
 
 import "./../../../styles/globalStyle.scss";
 import "../../../styles/products/Products.scss";
+import Box from "@mui/material/Box";
+import MenuItem from "@mui/material/MenuItem";
 
 export type TReview = {
   rating: number;
@@ -74,6 +76,12 @@ export type TData = {
   limit: number,
 }
 
+type TCategories = {
+  name: string,
+  slug: string,
+  url: string
+} []
+
 type FlatObject = { [key: string]: any };
 
 const flattenObject = (obj: FlatObject, parent: string = '', res: FlatObject = {}): FlatObject => {
@@ -104,16 +112,15 @@ const flattenObject = (obj: FlatObject, parent: string = '', res: FlatObject = {
 const Products = () => {
   const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
   const [open, setOpen] = useState<boolean>(false);
+  const [category, setCategory] = useState<string>('');
   //const [addedProduct, setAddedProduct] = useState<TProducts | null>(null);
 
   const {data, error, isLoading} = useFetch<TData>('https://dummyjson.com/products?limit=0',)
-  //const {doFetch: doFetchAdd, error: errorAdd, isLoading: isLoadingAdd } = useFetch('https://dummyjson.com/products/add', { method: 'POST' })
-  //const {doFetch: doFetchDelete, error: errorDelete, isLoading: isLoadingDelete } = useFetch<TProducts>(`https://dummyjson.com/products/${id}`, { method: 'DELETE' })
+  const {data: dataCategories, error: errorCategories, isLoading: isLoadingCategories } = useFetch<TCategories>('https://dummyjson.com/products/categories')
 
   const rows = useMemo(() => data?.products.map(product => product as TProducts) ?? [], [data]);
   const selectedProducts = useMemo(() => { return rows.filter(product => rowSelectionModel.includes(product.id)); }, [rowSelectionModel, rows]); //lepsi pre vykon, jednoduchost a presnost
   //const selectedProducts = useMemo(() => rowSelectionModel.map(id => rows.find(row => row.id === id) as TProducts), [rowSelectionModel, rows]) // ak rowSelectionModel obsahuje v ID ktore nie su v rows, vrati undefined. Moze dojst k neocakavanemu spravaniu alebo je nutnost dalsieho osetrenia. Uzitocny, ked chcem zachovat presne poradie
-  
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', headerClassName: 'header-class', width: 70, filterable: false },
@@ -166,6 +173,7 @@ const Products = () => {
 
   const handleClickOpen = () => {
     setOpen(true);
+    setCategory('');
   };
 
   const handleClose = () => {
@@ -196,11 +204,15 @@ const Products = () => {
       id: 0, // Dočasná hodnota, bude vygenerovaná backendom
       title: formJson.title as string,
       brand: formJson.brand as string,
-      category: formJson.category as string,
+      category: category,
       
     };
 
     handleAddProduct(newProduct);
+  };
+
+  const handleCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setCategory(event.target.value);
   };
 
   if (isLoading) { return <LoadingSpinner /> }
@@ -288,12 +300,13 @@ const Products = () => {
               Please fill in the following details to add a new product to the
               catalog. Ensure all required fields are completed accurately.
             </DialogContentText>
+
             <TextField
               required
               margin="dense"
               id="title"
               name="title"
-              label="Product Title"
+              label="Product's Name"
               fullWidth
               variant="standard"
             />
@@ -309,11 +322,25 @@ const Products = () => {
               margin="dense"
               id="category"
               name="category"
-              label="Category"
+              label="Select category"
               fullWidth
               variant="standard"
-            />
+              select
+              value={category}
+              onChange={handleCategoryChange}
+            >
+              {dataCategories && dataCategories.length > 0 ? (
+                dataCategories.map((category) => (
+                  <MenuItem key={category.slug} value={category.name}>
+                    {category.name}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem value="">No categories available</MenuItem>
+              )}
+            </TextField>
           </DialogContent>
+
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
             <Button type="submit">Save</Button>

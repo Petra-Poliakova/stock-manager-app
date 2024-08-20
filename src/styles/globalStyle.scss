@@ -140,27 +140,27 @@ body {
  
 }
 
-input[type="text"],
-textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid $accent;
-  box-sizing: border-box;
+// input[type="text"],
+// textarea {
+//   width: 100%;
+//   padding: 10px;
+//   border: 1px solid $accent;
+//   box-sizing: border-box;
   
-}
-input[type="text"]:hover  {
-  border: 2px solid $accent;
-  background-color: $neutral-secondary200-color;
-}
-input[type=text]:focus {
-    border: 2px solid $accent;
-    background-color: $neutral-secondary200-color;
-    outline: none;
-  }
-textarea:focus {
-  outline: none;
-  border: 2px solid $accent;
-}
+// }
+// input[type="text"]:hover  {
+//   border: 2px solid $accent;
+//   background-color: $neutral-secondary200-color;
+// }
+// input[type=text]:focus {
+//     border: 2px solid $accent;
+//     background-color: $neutral-secondary200-color;
+//     outline: none;
+//   }
+// textarea:focus {
+//   outline: none;
+//   border: 2px solid $accent;
+// }
 button {
   padding: 10px 15px;
   background-color: $primary800-color;
