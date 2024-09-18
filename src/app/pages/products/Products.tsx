@@ -155,7 +155,7 @@ const Products = () => {
     }
   };
 
-  const hnandleExportProducts = () => {
+  const handleExportProducts = () => {
     if (selectedProducts.length === 0) {
       alert("Please select at least one product to export.");
       return;
@@ -267,7 +267,7 @@ const Products = () => {
               variant="outlined"
               style={{ color: "#202e44", textTransform: "none" }}
               startIcon={<LuDownloadCloud size={15} />}
-              onClick={hnandleExportProducts}
+              onClick={handleExportProducts}
             >
               Export
             </Button>
