@@ -1,1 +1,18 @@
-@import './../../styles/globalStyle.scss'
+@import './../../styles/globalStyle.scss';
+
+.filterItem {
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0;
+}
+
+.filterInput {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.clearButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}

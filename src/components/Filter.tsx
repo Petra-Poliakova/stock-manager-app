@@ -1,27 +1,26 @@
 import React, { ChangeEvent } from "react";
 
 type FilterProps = {
-  placeholder: string;
-  value: string;
+  placeholder?: string;
+  value?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onClear: () => void;
 };
 
-const Filter = ({ placeholder, value, onChange, onClear }: FilterProps) => {
+const Filter = (({ placeholder = "Enter text", value = "", onChange, onClear }: FilterProps) => {
   return (
-    <div
-      className="filterItem"
-      style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}
-    >
+    <div className="filterItem">
       <input
         type="text"
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        aria-label="Filter input"
+        className="filterInput"
       />
-      <button onClick={onClear}>X</button>
+      <button onClick={onClear} aria-label="Clear filter" className="clearButton">X</button>
     </div>
   );
-};
+});
 
 export default Filter;

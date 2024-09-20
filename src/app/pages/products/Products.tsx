@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Header } from 'components/Header'
 import Filter from "components/Filter";
 import { useFetch } from "hooks/useFetch";
+import { useLocalStorage } from "hooks/useLocalSrorage";
 import LoadingSpinner from 'components/LoadingSpinner';
 import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
@@ -82,6 +83,18 @@ type TCategories = {
   url: string
 } []
 
+type TFilteredData = {
+  data: {
+    title: string;
+    brand: string;
+    category: string;
+    price: number;
+  },
+  sorting: {},
+  select:['title', 'brand', 'category', 'price'],
+  pagination: { page: number, pageSize: number }
+}
+
 type FlatObject = { [key: string]: any };
 
 const flattenObject = (obj: FlatObject, parent: string = '', res: FlatObject = {}): FlatObject => {
@@ -117,8 +130,20 @@ const Products = () => {
 
   const {data, error, isLoading} = useFetch<TData>('https://dummyjson.com/products?limit=0',)
   const {data: dataCategories, error: errorCategories, isLoading: isLoadingCategories } = useFetch<TCategories>('https://dummyjson.com/products/categories')
+  const [filters, setFilters] = useLocalStorage<{ [key: string]: any }>('tableFilters', {});
+  const [page, setPage] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(10);
 
-  const rows = useMemo(() => data?.products.map(product => product as TProducts) ?? [], [data]);
+  const rows = useMemo(() => {
+    let filteredProducts = data?.products ?? [];
+    if (filters.category) {
+      filteredProducts = filteredProducts.filter(product => product.category === filters.category);
+    }
+    // Add more filter conditions here if needed
+    return filteredProducts.map(product => product as TProducts);
+    
+  }, [data, filters]);
+
   const selectedProducts = useMemo(() => { return rows.filter(product => rowSelectionModel.includes(product.id)); }, [rowSelectionModel, rows]); //lepsi pre vykon, jednoduchost a presnost
   //const selectedProducts = useMemo(() => rowSelectionModel.map(id => rows.find(row => row.id === id) as TProducts), [rowSelectionModel, rows]) // ak rowSelectionModel obsahuje v ID ktore nie su v rows, vrati undefined. Moze dojst k neocakavanemu spravaniu alebo je nutnost dalsieho osetrenia. Uzitocny, ked chcem zachovat presne poradie
 
