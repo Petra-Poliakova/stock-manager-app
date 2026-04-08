@@ -1,73 +1,140 @@
-# React + TypeScript + Vite
+# Stock Manager App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend application for product management and a simple inventory dashboard built with React + TypeScript + Vite.
 
-Currently, two official plugins are available:
+The project displays a sales overview, a product table with actions, and a support section.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Main Features
 
-## React Compiler
+- Dashboard with KPI cards:
+  - New sales
+  - New sales revenue
+  - Revenue per unit
+- Low stock products chart (Chart.js + react-chartjs-2)
+- Top rated products table (MUI Table)
+- Products page (MUI DataGrid):
+  - row selection
+  - product deletion via API
+  - export selected products to XLSX
+  - add a new product through a modal form
+  - navigation to product detail
+- Product detail via dynamic route `products/:id` with a loader
+- Support section:
+  - contact details
+  - simple contact form
+- Collapsible sidebar menu via context (`MenuContext`)
+- Lazy-loaded pages using `React.lazy` + `Suspense`
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Technologies
 
-## Expanding the ESLint configuration
+- React 19
+- TypeScript
+- Vite
+- React Router
+- Material UI (`@mui/material`, `@mui/x-data-grid`)
+- Sass (SCSS)
+- Chart.js + react-chartjs-2
+- xlsx
+- react-icons
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## API and Data
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- External API: [DummyJSON Products API](https://dummyjson.com/products)
+- Local demo sales data: `src/data/sales.json`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+API endpoints used in the project:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- `GET https://dummyjson.com/products?limit=0`
+- `GET https://dummyjson.com/products/categories`
+- `GET https://dummyjson.com/products/:id`
+- `POST https://dummyjson.com/products/add`
+- `DELETE https://dummyjson.com/products/:id`
+
+## Run the Project Locally
+
+### 1. Install dependencies
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Configure environment variable
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The project uses `VITE_URL_BASE` (`base` in Vite config and `basename` in routing).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Create a `.env` file in the project root:
+
+```env
+VITE_URL_BASE=/
 ```
+
+If you host the app in a subdirectory (for example GitHub Pages), use:
+
+```env
+VITE_URL_BASE=/stock-manager/
+```
+
+### 3. Development server
+
+```bash
+npm run dev
+```
+
+### 4. Build
+
+```bash
+npm run build
+```
+
+### 5. Preview production build
+
+```bash
+npm run preview
+```
+
+### 6. Lint
+
+```bash
+npm run lint
+```
+
+## NPM Scripts
+
+- `npm run dev` - starts the Vite dev server
+- `npm run build` - TypeScript build (`tsc -b`) + Vite build
+- `npm run preview` - local preview of the production build
+- `npm run lint` - runs ESLint
+
+## Project Structure
+
+```text
+src/
+  app/
+    pages/
+      HomePage.tsx
+      products/
+        Products.tsx
+        ProductDetail.tsx
+      support/
+        Contact.tsx
+        ContactForm.tsx
+  components/
+    Header.tsx
+    LoadingSpinner.tsx
+  context/
+    MenuContext.tsx
+  hooks/
+    useFetch.ts
+    useLocalSrorage.ts
+  layouts/
+    RootLayout.tsx
+    SupportLayout.tsx
+  data/
+    sales.json
+```
+
+## Notes
+
+- Alias `@` points to `src`.
+- Products are loaded from an external API, so the app requires an internet connection.
+- `POST/DELETE` operations are executed against a public test API (DummyJSON).
