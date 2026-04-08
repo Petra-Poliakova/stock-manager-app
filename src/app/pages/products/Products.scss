@@ -1,5 +1,3 @@
-@import '../../styles/globalStyle.scss';
-
 .table-container {
     width: 100%;
     min-height: 500px;
@@ -8,9 +6,9 @@
     flex-direction: column;
     border-radius: 10px;
     padding-bottom: 50px;
-    background-color: $white-color;
+    background-color: var(--white-color);
     .price{
-        color: $accent;
+        color: var(--accent);
     }
     .title {
         font-weight: bold;

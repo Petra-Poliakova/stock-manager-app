@@ -1,9 +1,8 @@
-import React from "react";
-import { useLoaderData, useParams } from "react-router-dom";
+import { type LoaderFunctionArgs, useLoaderData } from "react-router";
 
-import { FaAngleDown, FaInfoCircle } from "react-icons/fa";
+import { FaInfoCircle } from "react-icons/fa";
 
-import "./../../../styles/products/ProductDetail.scss";
+import "./ProductDetail.scss";
 
 interface DataType {
   id: number;
@@ -19,8 +18,7 @@ interface DataType {
   images: string[];
 }
 
-const ProductDetail = () => {
-  const { id } = useParams();
+export const ProductDetail = () => {
   const productId = useLoaderData() as DataType;
 
   return (
@@ -87,12 +85,12 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export const ProductDetailLoader = async ({ params }: LoaderFunctionArgs) => {
+  if (!params.id) {
+    throw new Error("Missing product id");
+  }
 
-export const productDetailLoader = async ({ params }: any) => {
-  const { id } = params;
-
-  const res = await fetch("https://dummyjson.com/products/" + id);
+  const res = await fetch("https://dummyjson.com/products/" + params.id);
 
   if (!res.ok) {
     throw Error("Could not find that product");

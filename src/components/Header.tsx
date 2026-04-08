@@ -1,6 +1,5 @@
-import React from 'react'
-import { useMenu } from 'context/MenuContext'
-import { IMAGES } from 'constans/constans'
+import { useMenu } from '@/context/MenuContext'
+import { IMAGES } from '@/constans/constans'
 
 import { styled } from '@mui/material/styles';
 
@@ -48,7 +47,7 @@ export const Header = ({title, userName}: THeaderProps) => {
     <div className="header-container">
       <div className="header-left">
         <div className="menu-icon" onClick={toggleMenu}>
-          <IMAGES.Menu width="36px" height="36px" />
+          <IMAGES.Menu width={36} height={36} />
         </div>
         <div className="title">{title}</div>
       </div>

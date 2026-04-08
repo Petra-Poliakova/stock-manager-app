@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useMemo, ChangeEvent } from "react";
-import { Link } from "react-router-dom";
-import { Header } from 'components/Header'
-import Filter from "components/Filter";
-import { useFetch } from "hooks/useFetch";
-import { useLocalStorage } from "hooks/useLocalSrorage";
-import LoadingSpinner from 'components/LoadingSpinner';
-import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import React, { useState, useMemo } from "react";
+import type { ChangeEvent } from "react";
+import { Link } from "react-router";
+import { Header } from '@/components/Header'
+//import Filter from "@/components/Filter";
+import { useFetch } from "@/hooks/useFetch";
+import { useLocalStorage } from "@/hooks/useLocalSrorage";
+import LoadingSpinner from '@/components/LoadingSpinner';
+import { DataGrid, GridColDef, GridRowSelectionModel, GridRenderCellParams } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -14,14 +15,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FaRegTrashAlt } from "react-icons/fa";
-import { LuDownloadCloud } from "react-icons/lu";
+import { LuDownload } from "react-icons/lu";
 import { FiPlus } from "react-icons/fi";
 
 import { utils, writeFile } from 'xlsx';
 
-import "./../../../styles/globalStyle.scss";
-import "../../../styles/products/Products.scss";
-import Box from "@mui/material/Box";
+import "./Products.scss";
+//import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 
 export type TReview = {
@@ -83,22 +83,22 @@ type TCategories = {
   url: string
 } []
 
-type TFilteredData = {
-  data: {
-    title: string;
-    brand: string;
-    category: string;
-    price: number;
-  },
-  sorting: {},
-  select:['title', 'brand', 'category', 'price'],
-  pagination: { page: number, pageSize: number }
-}
+// type TFilteredData = {
+//   data: {
+//     title: string;
+//     brand: string;
+//     category: string;
+//     price: number;
+//   },
+//   sorting: {},
+//   select:['title', 'brand', 'category', 'price'],
+//   pagination: { page: number, pageSize: number }
+// }
 
-type FlatObject = { [key: string]: any };
+type FlatObject = { [key: string]: string | number | boolean | null | string[] | object };
 
 const flattenObject = (obj: FlatObject, parent: string = '', res: FlatObject = {}): FlatObject => {
-  for (let key in obj) {
+  for (const key in obj) {
       const propName = parent ? `${parent}.${key}` : key;
 
       if (Array.isArray(obj[key])) {
@@ -114,7 +114,7 @@ const flattenObject = (obj: FlatObject, parent: string = '', res: FlatObject = {
           // ).join(', ');
           
       } else if (typeof obj[key] === 'object' && obj[key] !== null) {
-          flattenObject(obj[key], propName, res);
+          flattenObject(obj[key] as FlatObject, propName, res);
       } else {
           res[propName] = obj[key];
       }
@@ -123,16 +123,16 @@ const flattenObject = (obj: FlatObject, parent: string = '', res: FlatObject = {
 };
 
 const Products = () => {
-  const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+  const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel | undefined>();
   const [open, setOpen] = useState<boolean>(false);
   const [category, setCategory] = useState<string>('');
   //const [addedProduct, setAddedProduct] = useState<TProducts | null>(null);
 
   const {data, error, isLoading} = useFetch<TData>('https://dummyjson.com/products?limit=0',)
-  const {data: dataCategories, error: errorCategories, isLoading: isLoadingCategories } = useFetch<TCategories>('https://dummyjson.com/products/categories')
-  const [filters, setFilters] = useLocalStorage<{ [key: string]: any }>('tableFilters', {});
-  const [page, setPage] = useState<number>(0);
-  const [pageSize, setPageSize] = useState<number>(10);
+  const {data: dataCategories } = useFetch<TCategories>('https://dummyjson.com/products/categories')
+  const [filters, ] = useLocalStorage<{ [key: string]: never }>('tableFilters', {});
+  //const [page, setPage] = useState<number>(0);
+  //const [pageSize, setPageSize] = useState<number>(10);
 
   const rows = useMemo(() => {
     let filteredProducts = data?.products ?? [];
@@ -144,13 +144,13 @@ const Products = () => {
     
   }, [data, filters]);
 
-  const selectedProducts = useMemo(() => { return rows.filter(product => rowSelectionModel.includes(product.id)); }, [rowSelectionModel, rows]); //lepsi pre vykon, jednoduchost a presnost
+  const selectedProducts = useMemo(() => {  if (!Array.isArray(rowSelectionModel)) return []; return rows.filter(product => rowSelectionModel.includes(product.id)); }, [rowSelectionModel, rows]); //lepsi pre vykon, jednoduchost a presnost
   //const selectedProducts = useMemo(() => rowSelectionModel.map(id => rows.find(row => row.id === id) as TProducts), [rowSelectionModel, rows]) // ak rowSelectionModel obsahuje v ID ktore nie su v rows, vrati undefined. Moze dojst k neocakavanemu spravaniu alebo je nutnost dalsieho osetrenia. Uzitocny, ked chcem zachovat presne poradie
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', headerClassName: 'header-class', width: 70, filterable: false },
     { field: 'title', headerName: 'Title', headerClassName: 'header-class', flex: 2, cellClassName: 'title',
-      renderCell: (params) => (
+      renderCell: (params: GridRenderCellParams) => (
         <Link to={`/products/${params.id.toString()}`} onClick={(event) => event.stopPropagation()}>{params.value}</Link>
       )
      },
@@ -170,8 +170,9 @@ const Products = () => {
         const url = `https://dummyjson.com/products/${product.id}`;
         const response = await fetch(url, { method: 'DELETE' });
         const result = await response.json();
+        console.log(`Deleted product with ID ${product.id}:`, result);
         alert(`Deleted product with ID ${product.id}: ${product.title}`);
-        setRowSelectionModel([]);
+        setRowSelectionModel(undefined);
       });
 
       await Promise.all(deletePromises);
@@ -186,11 +187,11 @@ const Products = () => {
       return;
     }
 
-    const flatData = selectedProducts.map(product => flattenObject(product) as TProducts);
+    const flatData = selectedProducts.map(product => flattenObject(product as unknown as FlatObject) as unknown as TProducts);
 
-    let wb = utils.book_new();
+    const wb = utils.book_new();
     //let ws = utils.json_to_sheet(selectedProducts);
-    let ws = utils.json_to_sheet(flatData);
+    const ws = utils.json_to_sheet(flatData);
     utils.book_append_sheet(wb, ws, "Products");
     writeFile(wb, "products.xlsx");
     console.log('selectedProducts', selectedProducts)
@@ -207,7 +208,7 @@ const Products = () => {
 
   const handleAddProduct = async (newProduct: TProducts) => {
     try {
-      const response = await fetch('https://dummyjson.com/products/add', {
+      await fetch('https://dummyjson.com/products/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newProduct),
@@ -291,7 +292,7 @@ const Products = () => {
             <Button
               variant="outlined"
               style={{ color: "#202e44", textTransform: "none" }}
-              startIcon={<LuDownloadCloud size={15} />}
+              startIcon={<LuDownload size={15} />}
               onClick={handleExportProducts}
             >
               Export
@@ -384,7 +385,7 @@ const Products = () => {
             }}
             pageSizeOptions={[10, 20, 30]}
             checkboxSelection
-            onRowSelectionModelChange={(ids) => {
+            onRowSelectionModelChange={(ids: GridRowSelectionModel) => {
               setRowSelectionModel(ids);
               //const selectedRows = rows.filter(row => ids.includes(row.id));
               //console.log('selectedRows', selectedRows);

@@ -1,11 +1,10 @@
-@import '../globalStyle.scss';
 
 .sidebar {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: $color-primary;
+    background-color: var(--color-primary);
     width: 207px;
     transition: width 0.3s ease;
 
@@ -36,7 +35,7 @@
         }
 
         a.active {
-            background-color: $color-primary-medium;
+            background-color: var(--color-primary-medium);
         }
 
         .navItem {
@@ -45,11 +44,11 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            color: $color-white;
+            color: var(--color-white);
             position: relative;
 
             .icon {
-                color: $color-white;
+                color: var(--color-white);
                 position: absolute;
                 top: 8px;
                 left: 8px;

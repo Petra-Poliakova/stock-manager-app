@@ -1,15 +1,13 @@
 import React, { FunctionComponent, SVGProps } from 'react';
-import { NavLink, Outlet } from "react-router-dom";
-import { useMenu } from "context/MenuContext";
+import { NavLink, Outlet } from "react-router";
+import { useMenu } from "@/context/MenuContext";
 
-import { IMAGES } from 'constans/constans';
+import { IMAGES } from '@/constans/constans';
 
-import "../styles/layouts/RootLayout.scss"
+import "./RootLayout.scss"
 
 
-interface RootLayoutProps {}
-
-const RootLayout: React.FC<RootLayoutProps> = () => {
+const RootLayout = () => {
   const { isFullSizeMenu } = useMenu();
 
   const menuClasses = `sidebar ${isFullSizeMenu ? '' : 'collapsed'}`;

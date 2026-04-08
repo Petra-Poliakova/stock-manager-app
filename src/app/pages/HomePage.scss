@@ -1,5 +1,3 @@
-@import '../../styles/globalStyle.scss';
-
     .box-container {
         display: flex;
         flex-direction: row;
@@ -14,7 +12,7 @@
             justify-content: space-between;
             border-radius: 10px;
             padding: 25px;
-            background-color: $white-color;
+            background-color: var(--white-color);
             .box-text{
                 display: flex;
                 flex-direction: column;
@@ -22,7 +20,7 @@
                     color: #666666;
                 }
                 span:last-child{
-                    color: $primary-color;
+                    color: var(--primary-color);
                     font-weight: bold;
                     font-size: 20px;
                 }
@@ -35,12 +33,12 @@
         height: auto;
         margin: 25px 0;
         border-radius: 10px;
-        background-color: $white-color;
+        background-color: var(--white-color);
         .title{
             padding: 25px;
             font-size: 20px;
             font-weight: bold;
-            color: $primary-color;
+            color: var(--primary-color);
         }
         .chart {
             width: 90%;
@@ -57,12 +55,12 @@
     margin: 25px 0;
     border-radius: 10px;
     padding-bottom: 50px;
-    background-color: $white-color;
+    background-color: var(--white-color);
     .title{
         padding: 25px;
         font-size: 20px;
         font-weight: bold;
-        color: $primary-color;
+        color: var(--primary-color);
     }
 }
 

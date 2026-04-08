@@ -1,18 +1,16 @@
-import React from 'react'
-import { Header } from 'components/Header'
-import { useFetch } from 'hooks/useFetch'
-import { ChartData, ChartOptions} from 'chart.js/auto'
+import { Header } from "@/components/Header"
+import { useFetch } from '@/hooks/useFetch'
+import type { ChartData, ChartOptions} from 'chart.js/auto'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, } from 'chart.js';
 import {Bar} from 'react-chartjs-2'
 
-import LoadingSpinner from 'components/LoadingSpinner'
+import LoadingSpinner from '@/components/LoadingSpinner'
 
-import { TData } from './products/Products'
-import { IMAGES } from 'constans/constans'
+import { TData } from '@/app/pages/products/Products'
+import { IMAGES } from '@/constans/constans'
 
-import salesData from 'data/sales.json'
+import salesData from '@/data/sales.json'
 
-import 'styles/globalStyle.scss'
 import './HomePage.scss'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 

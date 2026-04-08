@@ -1,33 +1,36 @@
+:root {
 //color variables
-$primary-color: #202e44; //logo, headlines, button
-$secondary-color: #a9bbc8;
-$neutral-primary-color: #c7bcab;
-$neutral-secondary-color: #f2f2eb;
-$primary800-color: #283a55;
-$primary600-color: #304567;
-$primary200-color: #f5f6f7;
-$primary100-color: #fafafb;
-$accent: #8b734c;
-$white-color: #ffffff;
-$neutral-secondary200-color: #fafaf7;
+--primary-color: #202e44; //logo, headlines, button
+--secondary-color: #a9bbc8;
+--neutral-primary-color: #c7bcab;
+--neutral-secondary-color: #f2f2eb;
+--primary800-color: #283a55;
+--primary600-color: #304567;
+--primary200-color: #f5f6f7;
+--primary100-color: #fafafb;
+--accent: #8b734c;
+--white-color: #ffffff;
+--neutral-secondary200-color: #fafaf7;
 
 //new varieble color
- $color-primary: #202e44;
- $color-secondary: #a9bbc8;
- $color-neutral-primary: #c7bcab;
- $color-neutral-secondary: #f2f2eb;
+ --color-primary: #202e44;
+ --color-secondary: #a9bbc8;
+ --color-neutral-primary: #c7bcab;
+ --color-neutral-secondary: #f2f2eb;
 
- $color-primary-dark: #283a55;
- $color-primary-medium: #304567;
- $color-primary-light: #f5f6f7;
- $color-primary-lighter: #fafafb;
+ --color-primary-dark: #283a55;
+ --color-primary-medium: #304567;
+ --color-primary-light: #f5f6f7;
+ --color-primary-lighter: #fafafb;
 
- $color-accent: #8b734c;
- $color-white: #ffffff;
- $color-neutral-secondary-light: #fafaf7;
- $color-text: #1B2A3F;
+ --color-accent: #8b734c;
+ --color-white: #ffffff;
+ --color-neutral-secondary-light: #fafaf7;
+ --color-text: #1B2A3F;
 
- $color-light-grey:#F0F0F0;
+ --color-light-grey:#F0F0F0;
+
+}
 
 h1,
 h2,
@@ -35,7 +38,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: $primary-color;
+  color: var(--primary-color);
 }
 
 h1 {
@@ -70,7 +73,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: $color-light-grey;
+  background-color: var(--color-light-grey);
 }
 
 
@@ -80,7 +83,7 @@ body {
 //   align-items: center;
 //   width: 100%;
 //   min-height: 70px;
-//   background-color: $primary-color;
+//   background-color: var(--color-primary);
 // }
 
 // .logo-container {
@@ -123,15 +126,15 @@ body {
 }
 
 .tableHeaderStyle {
-  background-color: $primary-color;
-  border-right: 7px solid $white-color;
-  color: $white-color;
+  background-color: var(--color-primary);
+  border-right: 7px solid var(--color-white);
+  color: var(--color-white);
   padding: 10px;
   font-weight: "bold";
 }
 .tableCellStyle {
-  background-color: $primary200-color;
-  border: 7px solid $white-color;
+  background-color: var(--color-primary-light);
+  border: 7px solid var(--color-white);
   padding: 10px;
   
   a{
@@ -144,37 +147,37 @@ body {
 // textarea {
 //   width: 100%;
 //   padding: 10px;
-//   border: 1px solid $accent;
+//   border: 1px solid var(--color-accent);
 //   box-sizing: border-box;
   
 // }
 // input[type="text"]:hover  {
-//   border: 2px solid $accent;
-//   background-color: $neutral-secondary200-color;
+//   border: 2px solid var(--color-accent);
+//   background-color: var(--color-neutral-secondary200-color);
 // }
 // input[type=text]:focus {
-//     border: 2px solid $accent;
-//     background-color: $neutral-secondary200-color;
+//     border: 2px solid var(--color-accent);
+//     background-color: var(--color-neutral-secondary200-color);
 //     outline: none;
 //   }
 // textarea:focus {
 //   outline: none;
-//   border: 2px solid $accent;
+//   border: 2px solid var(--color-accent);
 // }
 button {
   padding: 10px 15px;
-  background-color: $primary800-color;
-  color: white;
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
   border: none;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: $primary600-color;
+  background-color: var(--color-primary-medium);
 }
 
 button:active {
-  background-color: $accent;
+  background-color: var(--color-accent);
 }
 
 button:focus {
@@ -184,6 +187,6 @@ button:focus {
 .title-box{
   font-size: 20px;
   font-weight: bold;
-  color: $primary-color;
+  color: var(--color-primary);
   
 }

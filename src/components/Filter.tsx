@@ -1,9 +1,10 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
+import "./Filter.scss";
 
 type FilterProps = {
   placeholder?: string;
   value?: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClear: () => void;
 };
 

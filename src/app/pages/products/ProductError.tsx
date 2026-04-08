@@ -1,7 +1,5 @@
 import React from 'react'
-import { Link, useRouteError } from 'react-router-dom'
-
-import './../../../styles/globalStyle.scss'
+import { Link, useRouteError } from 'react-router'
 
 interface ErrorProps {
     message: string;

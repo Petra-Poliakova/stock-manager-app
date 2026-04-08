@@ -1,7 +1,5 @@
 import React from "react";
 
-import "./../../styles/globalStyle.scss";
-
 type FilterInputItemProps = {
   placeholder: string;
   value: string;

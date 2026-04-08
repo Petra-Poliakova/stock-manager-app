@@ -1,7 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-
-import './../styles/globalStyle.scss'
+import { Link } from 'react-router'
 
 const NotFound = () => {
   return (

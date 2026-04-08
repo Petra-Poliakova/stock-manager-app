@@ -1,12 +1,12 @@
-import {ReactComponent as Logo} from "../assets/logo_svg.svg";
-import { ReactComponent as ProductIcon } from '../assets/product.svg';
-import { ReactComponent as DashboardIcon } from '../assets/dashboard.svg';
-import { ReactComponent as SupportIcon } from '../assets/support.svg';
-import { ReactComponent as Menu } from "../assets/menu.svg";
-import { ReactComponent as ChartBar } from "../assets/chart-bar.svg";
-import { ReactComponent as Money } from "../assets/money.svg";
-import { ReactComponent as UserPlus } from "../assets/user-plus.svg";
-import { ReactComponent as ChartLine } from "../assets/chart-line.svg";
+import Logo from "../assets/logo_svg.svg?react";
+import ProductIcon from '../assets/product.svg?react';
+import DashboardIcon from '../assets/dashboard.svg?react';
+import SupportIcon from '../assets/support.svg?react';
+import Menu from "../assets/menu.svg?react";
+import ChartBar from "../assets/chart-bar.svg?react";
+import Money from "../assets/money.svg?react";
+import UserPlus from "../assets/user-plus.svg?react";
+import ChartLine from "../assets/chart-line.svg?react";
 
 export const IMAGES = {
     Logo: Logo,
