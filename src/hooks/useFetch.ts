@@ -18,7 +18,7 @@ type TFetchOptions = RequestInit;
   const [statusText, setStatusText] = useState<string | null>(null);
 
   const optionsRef = useRef<TFetchOptions | undefined>(options);
-  const abortControllerRef = useRef<AbortController >();
+  const abortControllerRef = useRef<AbortController | null>(null);
 
    const fetchData = useCallback(async (): Promise<void> => {
       setIsLoading(true);
@@ -42,10 +42,12 @@ type TFetchOptions = RequestInit;
           //console.log(json); 
           setData(json);
         
-      } catch (error: any) {
-        if(error.name !== 'AbortError') {
-          setError(error instanceof Error ? error : new Error('Unknown error'));
-        } 
+      } catch (error: unknown) {
+        if (error instanceof Error && error.name !== 'AbortError') {
+          setError(error);
+        } else if (!(error instanceof Error) && error !== null) {
+          setError(new Error('Unknown error'));
+        }
 
       } finally {
         if (!signal.aborted) {

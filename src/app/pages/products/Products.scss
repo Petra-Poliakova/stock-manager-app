@@ -14,3 +14,20 @@
         font-weight: bold;
     }
 }
+
+.filter-container {
+    min-height: 65 px;
+    margin: 25px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 10px;
+    padding: 25px;
+    background-color: var(--white-color);
+
+    > div {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+    }
+}

@@ -1,28 +1,24 @@
 import React, { useState, useMemo } from "react";
 import type { ChangeEvent } from "react";
 import { Link } from "react-router";
-import { Header } from '@/components/Header'
+import { Header } from "@/components/Header";
 //import Filter from "@/components/Filter";
 import { useFetch } from "@/hooks/useFetch";
 import { useLocalStorage } from "@/hooks/useLocalSrorage";
-import LoadingSpinner from '@/components/LoadingSpinner';
-import { DataGrid, GridColDef, GridRowSelectionModel, GridRenderCellParams } from '@mui/x-data-grid';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import LoadingSpinner from "@/components/LoadingSpinner";
+import CreateProductDialog from "@/components/CreateProductDialog";
+import { DataGrid, GridColDef, GridRowSelectionModel, GridRenderCellParams, GridSortModel } from "@mui/x-data-grid";
+import { Button, Box, TextField, Select, MenuItem, InputLabel, FormControl, SelectChangeEvent, } from "@mui/material";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { LuDownload } from "react-icons/lu";
 import { FiPlus } from "react-icons/fi";
+import { MdFilterList } from "react-icons/md";
+import { MdOutlineClose } from "react-icons/md";
+import { flattenObject } from "@/helpers/flattenObject";
 
-import { utils, writeFile } from 'xlsx';
+import { utils, writeFile } from "xlsx";
 
 import "./Products.scss";
-//import Box from "@mui/material/Box";
-import MenuItem from "@mui/material/MenuItem";
 
 export type TReview = {
   rating: number;
@@ -71,155 +67,196 @@ export type TProducts = {
 };
 
 export type TData = {
-  products: TProducts[],
-  total: number,
-  skip: number,
-  limit: number,
-}
-
-type TCategories = {
-  name: string,
-  slug: string,
-  url: string
-} []
-
-// type TFilteredData = {
-//   data: {
-//     title: string;
-//     brand: string;
-//     category: string;
-//     price: number;
-//   },
-//   sorting: {},
-//   select:['title', 'brand', 'category', 'price'],
-//   pagination: { page: number, pageSize: number }
-// }
-
-type FlatObject = { [key: string]: string | number | boolean | null | string[] | object };
-
-const flattenObject = (obj: FlatObject, parent: string = '', res: FlatObject = {}): FlatObject => {
-  for (const key in obj) {
-      const propName = parent ? `${parent}.${key}` : key;
-
-      if (Array.isArray(obj[key])) {
-        if (typeof obj[key][0] === 'object') {
-          obj[key].forEach((item: FlatObject, index: number) => {
-              flattenObject(item, `${propName}[${index}]`, res);
-          });
-      } else {
-          res[propName] = obj[key].join(', ');
-      }
-          // res[propName] = obj[key].map((item: any) => 
-          //     typeof item === 'object' ? JSON.stringify(item) : item
-          // ).join(', ');
-          
-      } else if (typeof obj[key] === 'object' && obj[key] !== null) {
-          flattenObject(obj[key] as FlatObject, propName, res);
-      } else {
-          res[propName] = obj[key];
-      }
-  }
-  return res;
+  products: TProducts[];
+  total: number;
+  skip: number;
+  limit: number;
 };
 
-const Products = () => {
-  const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel | undefined>();
-  const [open, setOpen] = useState<boolean>(false);
-  const [category, setCategory] = useState<string>('');
-  //const [addedProduct, setAddedProduct] = useState<TProducts | null>(null);
+type TCategories = {
+  name: string;
+  slug: string;
+  url: string;
+}[];
 
-  const {data, error, isLoading} = useFetch<TData>('https://dummyjson.com/products?limit=0',)
-  const {data: dataCategories } = useFetch<TCategories>('https://dummyjson.com/products/categories')
-  const [filters, ] = useLocalStorage<{ [key: string]: never }>('tableFilters', {});
-  //const [page, setPage] = useState<number>(0);
-  //const [pageSize, setPageSize] = useState<number>(10);
+type TTableState = {
+  filters: {
+    title: string;
+    category: string;
+  };
+  sorting: GridSortModel;
+  pagination: {
+    page: number;
+    pageSize: number;
+  };
+};
+
+const defaultTableState: TTableState = {
+  filters: {
+    title: "",
+    category: "",
+  },
+  sorting: [{ field: "id", sort: "asc" }],
+  pagination: { page: 0, pageSize: 10,},
+};
+
+
+
+const Products = () => {
+  const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>({ type: 'include', ids: new Set() });
+  const [open, setOpen] = useState<boolean>(false);
+  const [category, setCategory] = useState<string>("");
+  const [tableState, setTableState] = useLocalStorage<TTableState>("products-table-state", defaultTableState,);
+  
+  const { data, error, isLoading } = useFetch<TData>( "https://dummyjson.com/products?limit=0", );
+  const { data: dataCategories } = useFetch<TCategories>( "https://dummyjson.com/products/categories", );
+  const { data: categoryList} = useFetch<string[]>( "https://dummyjson.com/products/category-list", );
+
+  /*------------------- Table data ---------------------------*/
+  const columns: GridColDef[] = [
+      {
+        field: "id",
+        headerName: "ID",
+        headerClassName: "header-class",
+        width: 70,
+        filterable: false,
+      },
+      {
+        field: "title",
+        headerName: "Title",
+        headerClassName: "header-class",
+        filterable: false,
+        flex: 2,
+        cellClassName: "title",
+        renderCell: (params: GridRenderCellParams) => (
+          <Link
+            to={`/products/${params.id.toString()}`}
+            onClick={(event) => event.stopPropagation()}
+          >
+            {params.value}
+          </Link>
+        ),
+      },
+      {
+        field: "brand",
+        headerName: "Brand",
+        headerClassName: "header-class",
+        flex: 1,
+        filterable: false,
+      },
+      {
+        field: "category",
+        headerName: "Category",
+        headerClassName: "header-class",
+        flex: 1,
+        filterable: false,
+      },
+      {
+        field: "price",
+        headerName: "Price ( € )",
+        headerClassName: "header-class",
+        flex: 1,
+        filterable: false,
+        cellClassName: "price",
+      },
+    ];
 
   const rows = useMemo(() => {
-    let filteredProducts = data?.products ?? [];
-    if (filters.category) {
-      filteredProducts = filteredProducts.filter(product => product.category === filters.category);
-    }
-    // Add more filter conditions here if needed
-    return filteredProducts.map(product => product as TProducts);
-    
-  }, [data, filters]);
+  const titleFilter = tableState.filters.title.trim().toLowerCase();
+  const categoryFilter = tableState.filters.category;
 
-  const selectedProducts = useMemo(() => {  if (!Array.isArray(rowSelectionModel)) return []; return rows.filter(product => rowSelectionModel.includes(product.id)); }, [rowSelectionModel, rows]); //lepsi pre vykon, jednoduchost a presnost
-  //const selectedProducts = useMemo(() => rowSelectionModel.map(id => rows.find(row => row.id === id) as TProducts), [rowSelectionModel, rows]) // ak rowSelectionModel obsahuje v ID ktore nie su v rows, vrati undefined. Moze dojst k neocakavanemu spravaniu alebo je nutnost dalsieho osetrenia. Uzitocny, ked chcem zachovat presne poradie
+  return (data?.products ?? [])
+    .filter((product) => {
+      const matchesTitle =
+        !titleFilter ||
+        product.title.toLowerCase().includes(titleFilter);
 
-  const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', headerClassName: 'header-class', width: 70, filterable: false },
-    { field: 'title', headerName: 'Title', headerClassName: 'header-class', flex: 2, cellClassName: 'title',
-      renderCell: (params: GridRenderCellParams) => (
-        <Link to={`/products/${params.id.toString()}`} onClick={(event) => event.stopPropagation()}>{params.value}</Link>
-      )
-     },
-    { field: 'brand', headerName: 'Brand', headerClassName: 'header-class', flex: 1 },
-    { field: 'category', headerName: 'Category', headerClassName: 'header-class', flex: 1 },
-    { field: 'price', headerName: 'Price ( € )', headerClassName: 'header-class', flex: 1, cellClassName: 'price' },
-  ];
+      const matchesCategory =
+        !categoryFilter ||
+        product.category === categoryFilter;
 
-  const handleDeleteProducts = async () => {
-    if (selectedProducts.length === 0) {
-      alert("Please select at least one product to delete.");
-      return;
-    }
+      return matchesTitle && matchesCategory;
+    })
+    .map((product) => ({
+      id: product.id,
+      title: product.title,
+      brand: product.brand,
+      category: product.category,
+      price: product.price,
+    }));
+}, [data, tableState.filters]);
 
-    try {
-      const deletePromises = selectedProducts.map(async (product) => {
-        const url = `https://dummyjson.com/products/${product.id}`;
-        const response = await fetch(url, { method: 'DELETE' });
-        const result = await response.json();
-        console.log(`Deleted product with ID ${product.id}:`, result);
-        alert(`Deleted product with ID ${product.id}: ${product.title}`);
-        setRowSelectionModel(undefined);
-      });
+  const rowSelectedProducts = useMemo(() => {
+    if (!rowSelectionModel?.ids?.size) return [];
+    return rows?.filter((product) => rowSelectionModel.ids.has(product.id));
+  }, [rowSelectionModel, rows]);
 
-      await Promise.all(deletePromises);
-    } catch (error) {
-      console.error("Error deleting products:", error);
-    }
-  };
+  const deleteSelectedProducts = async () => {
+  if (!rowSelectedProducts?.length) {
+    alert("Please select at least one product to delete.");
+    return;
+  }
+
+  try {
+    await Promise.all(
+      rowSelectedProducts.map(async (product) => {
+        const response = await fetch(`https://dummyjson.com/products/${product.id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to delete product ${product.id}`);
+        }
+
+        return response.json();
+      }),
+    );
+
+    setRowSelectionModel({ type: "include", ids: new Set() });
+    alert(`${rowSelectedProducts.length} product(s) deleted.`);
+  } catch (error) {
+    console.error("Error deleting products:", error);
+    alert("Deleting products failed.");
+  }
+};
 
   const handleExportProducts = () => {
-    if (selectedProducts.length === 0) {
-      alert("Please select at least one product to export.");
-      return;
-    }
+    if (rowSelectedProducts?.length === 0) { alert("Please select at least one product to export."); return; }
 
-    const flatData = selectedProducts.map(product => flattenObject(product as unknown as FlatObject) as unknown as TProducts);
+    const flatData = rowSelectedProducts?.map((product: TProducts) =>
+        flattenObject(product),
+    );
 
     const wb = utils.book_new();
     //let ws = utils.json_to_sheet(selectedProducts);
-    const ws = utils.json_to_sheet(flatData);
+    const ws = utils.json_to_sheet(flatData ?? []);
     utils.book_append_sheet(wb, ws, "Products");
     writeFile(wb, "products.xlsx");
-    console.log('selectedProducts', selectedProducts)
-  }
-
-  const handleClickOpen = () => {
-    setOpen(true);
-    setCategory('');
   };
 
-  const handleClose = () => {
+  const openDialogAddProduct = () => {
+    setOpen(true);
+    setCategory("");
+  };
+
+  const closeDialogAddProduct = () => {
     setOpen(false);
   };
 
   const handleAddProduct = async (newProduct: TProducts) => {
     try {
-      await fetch('https://dummyjson.com/products/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("https://dummyjson.com/products/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newProduct),
       })
-      .then(response => response.json())
-      .then(console.log);
-      handleClose()
+        .then((response) => response.json())
+        .then(console.log);
+      closeDialogAddProduct();
     } catch (error) {
       console.error("Error adding product:", error);
     }
-  }
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -227,71 +264,184 @@ const Products = () => {
     const formJson = Object.fromEntries(formData.entries());
 
     const newProduct: TProducts = {
-      id: 0, // Dočasná hodnota, bude vygenerovaná backendom
+      id: 0, 
       title: formJson.title as string,
       brand: formJson.brand as string,
       category: category,
-      
     };
 
     handleAddProduct(newProduct);
+    alert(`Product "${newProduct.title}" with category "${newProduct.category}" added successfully!`);
   };
 
   const handleCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCategory(event.target.value);
   };
 
-  if (isLoading) { return <LoadingSpinner /> }
-  if (error) { return <div>Error: {error.message}</div> }
+  const handleTitleFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
+  setTableState((prev) => ({
+    ...prev,
+    filters: {
+      ...prev.filters,
+      title: event.target.value,
+    },
+    pagination: {
+      ...prev.pagination,
+      page: 0,
+    },
+  }));
+  
+};
+
+const handleCategoryFilterChange = (event: SelectChangeEvent) => {
+  const selectedCategory = event.target.value; 
+
+  setTableState((prev) => ({
+    ...prev,
+    filters: {
+      ...prev.filters,
+      category: selectedCategory,
+    },
+    pagination: {
+      ...prev.pagination,
+      page: 0,
+    },
+    
+  }));
+};
+
+const clearTitleFilter = () => {
+  setTableState((prev) => ({
+    ...prev,
+    filters: {
+      ...prev.filters,
+      title: "",
+    },
+    pagination: {
+      ...prev.pagination,
+      page: 0,
+    },
+  }));
+};
+
+const clearCategoryFilter = () => {
+  setTableState((prev) => ({
+    ...prev,
+    filters: {
+      ...prev.filters,
+      category: "",
+    },
+    pagination: {
+      ...prev.pagination,
+      page: 0,
+    },
+  }));
+};
+
+const handleClearFilters = () => {
+  setTableState((prev) => ({
+    ...prev,  
+    filters: {
+      title: "",
+      category: "",
+    },  
+    pagination: {
+      ...prev.pagination,
+      page: 0,
+    },
+  }));
+};
+
+const hasActiveFilters =
+  Boolean(tableState.filters.title) || Boolean(tableState.filters.category);
+
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div className="page-container">
       <Header title="Products" userName="AV"></Header>
-      <div
-        className="table-container"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              padding: "25px",
-            }}
-          >
+      <div className="filter-container">
+        <div className="filter-bar">
+          <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            <MdFilterList size={20} />
+            <span>Filter</span>
+          </div>
+          <div>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <TextField
+                label="Product name"
+                variant="outlined"
+                size="small"
+                sx={{ width: 160 }}
+                value={tableState.filters.title}
+                onChange={handleTitleFilterChange}
+              />
+              <FormControl size="small" sx={{ width: 160 }}>
+                <InputLabel id="category-label">Category</InputLabel>
+                <Select
+                  labelId="category-label"
+                  label="Category"
+                  value={tableState.filters.category}
+                  onChange={handleCategoryFilterChange}
+                >
+                  <MenuItem value="">
+                    <em>All categories</em>
+                  </MenuItem>
+                  {categoryList?.map((category) => (
+                    <MenuItem key={category} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          </div>
+        </div>
+        <div className="filter-active">
+          {tableState.filters.title && <Button variant="contained" endIcon={<MdOutlineClose />} 
+          sx={{textTransform: "none", color: 'var(--accent)', backgroundColor: 'var(--color-neutral-secondary)', "&:hover": { backgroundColor: 'var(--accent)', color: '#fff' },}}
+          onClick={clearTitleFilter}>
+            Product name: {tableState.filters.title}
+            </Button>}
+          {tableState.filters.category && <Button variant="contained" endIcon={<MdOutlineClose />} 
+          sx={{textTransform: "none", color: 'var(--accent)', backgroundColor: 'var(--color-neutral-secondary)', "&:hover": { backgroundColor: 'var(--accent)', color: '#fff' },}}
+          onClick={clearCategoryFilter}>
+            Category: {tableState.filters.category}
+            </Button>}
+          </div>
+        {hasActiveFilters && <div className="filter-clear">
+          <Button size="medium" variant="outlined" onClick={handleClearFilters}
+            sx={{
+              textTransform: "none", color: 'var(--accent)', borderColor: 'var(--accent)',
+              "&:hover": { backgroundColor: 'var(--color-neutral-secondary)' },
+            }} 
+          >Clear all filters</Button>
+        </div>}
+      </div>
+      <div className="table-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", }} >
+        <div style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", }} >
+          <div style={{ display: "flex", flexDirection: "column", padding: "25px", }} >
             <div className="title-box">Overview</div>
             <div>Quickly access product details directly from the table.</div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              padding: "25px",
-              gap: "10px",
-            }}
-          >
+          </div> 
+          <div style={{ display: "flex", flexDirection: "row", padding: "25px", gap: "10px", }} >
             <Button
               variant="text"
-              style={{ color: "#202e44", textTransform: "none" }}
+              sx={{color: "#202e44", textTransform: "none", "&:hover": { backgroundColor: "transparent", color: "#8b734c" },}}
               startIcon={<FaRegTrashAlt size={15} />}
-              onClick={handleDeleteProducts}
+              onClick={deleteSelectedProducts}
             >
               Delete
             </Button>
             <Button
               variant="outlined"
-              style={{ color: "#202e44", textTransform: "none" }}
+              sx={{color: "#202e44", textTransform: "none", "&:hover": { backgroundColor: "transparent", color: "#8b734c" },}}
               startIcon={<LuDownload size={15} />}
               onClick={handleExportProducts}
             >
@@ -299,96 +449,49 @@ const Products = () => {
             </Button>
             <Button
               variant="contained"
-              style={{
+              sx={{
                 color: "#fff",
                 textTransform: "none",
                 backgroundColor: "#8b734c",
+                "&:hover": { backgroundColor: "#7a623f" },
               }}
               startIcon={<FiPlus size={15} />}
-              onClick={handleClickOpen}
+              onClick={openDialogAddProduct}
             >
               Add new
             </Button>
           </div>
         </div>
 
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          PaperProps={{
-            component: "form",
-            onSubmit: handleSubmit,
-          }}
-        >
-          <DialogTitle>Create new product</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Please fill in the following details to add a new product to the
-              catalog. Ensure all required fields are completed accurately.
-            </DialogContentText>
-
-            <TextField
-              required
-              margin="dense"
-              id="title"
-              name="title"
-              label="Product's Name"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              margin="dense"
-              id="brand"
-              name="brand"
-              label="Brand"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              margin="dense"
-              id="category"
-              name="category"
-              label="Select category"
-              fullWidth
-              variant="standard"
-              select
-              value={category}
-              onChange={handleCategoryChange}
-            >
-              {dataCategories && dataCategories.length > 0 ? (
-                dataCategories.map((category) => (
-                  <MenuItem key={category.slug} value={category.name}>
-                    {category.name}
-                  </MenuItem>
-                ))
-              ) : (
-                <MenuItem value="">No categories available</MenuItem>
-              )}
-            </TextField>
-          </DialogContent>
-
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit">Save</Button>
-          </DialogActions>
-        </Dialog>
+              <CreateProductDialog
+                open={open}
+                closeDialogAddProduct={closeDialogAddProduct}
+                handleSubmit={handleSubmit}
+                category={category}
+                handleCategoryChange={handleCategoryChange}
+                dataCategories={dataCategories ?? null}
+              />
 
         <div style={{ width: "100%" }}>
           <DataGrid
             rows={rows}
             columns={columns}
             autoHeight
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 10 },
-              },
+            sortModel={tableState.sorting}
+            onSortModelChange={(newSortModel) => {
+              setTableState((prev) => ({ ...prev, sorting: newSortModel,})); 
+            }}
+            paginationModel={tableState.pagination}
+            onPaginationModelChange={(newPaginationModel) => {
+              setTableState((prev) => ({
+                ...prev,
+                pagination: newPaginationModel,
+              }));
             }}
             pageSizeOptions={[10, 20, 30]}
             checkboxSelection
-            onRowSelectionModelChange={(ids: GridRowSelectionModel) => {
-              setRowSelectionModel(ids);
-              //const selectedRows = rows.filter(row => ids.includes(row.id));
-              //console.log('selectedRows', selectedRows);
+            onRowSelectionModelChange={(newRowSelectionModel: GridRowSelectionModel) => {
+              setRowSelectionModel(newRowSelectionModel);
             }}
             rowSelectionModel={rowSelectionModel}
             sx={{
@@ -411,8 +514,4 @@ const Products = () => {
 };
 
 export default Products;
-
-//TODO
-// 1. Add error handling  
-// 2. Add filter
 
