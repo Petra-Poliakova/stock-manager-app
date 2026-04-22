@@ -1,101 +1,200 @@
-import { type LoaderFunctionArgs, useLoaderData } from "react-router";
+import { useState } from "react";
+import { useLoaderData, LoaderFunctionArgs } from "react-router";
+import { Header } from "@/components/Header";
 
-import { FaInfoCircle } from "react-icons/fa";
+import UniversalImg from '../../../assets/univesral-image.jpg';
+import { LuInfo, LuMessageSquare, LuRuler, LuHash, LuTrash2 } from "react-icons/lu";
+import { formatDate } from "@/helpers/formatDate";
 
 import "./ProductDetail.scss";
 
-interface DataType {
+export interface ProductReview {
+  rating: number;
+  comment: string;
+  date: string; // ISO dátum
+  reviewerName: string;
+  reviewerEmail: string;
+}
+
+export interface ProductDimensions {
+  width: number;
+  height: number;
+  depth: number;
+}
+
+export interface ProductMeta {
+  createdAt: string;
+  updatedAt: string;
+  barcode: string;
+  qrCode: string;
+}
+
+export interface ProductDetailData {
   id: number;
   title: string;
   description: string;
-  brand: string;
   category: string;
   price: number;
   discountPercentage: number;
   rating: number;
   stock: number;
-  thumbnail: string;
+  tags: string[];
+  brand: string;
+  sku: string;
+  weight: number;
+  dimensions: ProductDimensions;
+  warrantyInformation: string;
+  shippingInformation: string;
+  availabilityStatus: string;
+  reviews: ProductReview[];
+  returnPolicy: string;
+  minimumOrderQuantity: number;
+  meta: ProductMeta;
   images: string[];
+  thumbnail: string;
 }
 
 export const ProductDetail = () => {
-  const productId = useLoaderData() as DataType;
+  const productId = useLoaderData() as ProductDetailData;
+  const [activeTab, setActiveTab] = useState< "details" | "reviews" | "dimensions" | "meta">("details");
+
+  const images = [
+    productId.images[0] || UniversalImg,
+    productId.images[1] || UniversalImg,
+    productId.images[2] || UniversalImg,
+  ]
 
   return (
-    <div className="page-container">
-      <h1>Product detail</h1>
-      <div className="productDetailContainer">
-        <div className="iconArea">
-          <FaInfoCircle color={"#202e44"} size={24} />
-        </div>
-        <div className="detailBox">
-          <div className="detailImgBox">
-            <h2>Title: {productId.title}</h2>
-            <p>
-              <img src={productId.thumbnail} alt="product" />
-            </p>
-          </div>
-          <div className="detailTextBox">
-            <div className="text">
-              <p>
-                <b>Id: </b>
-                {productId.id}
-              </p>
-              <p>
-                <b>Category: </b> {productId.category}
-              </p>
-              <p>
-                <b>Brand: </b> {productId.brand}
-              </p>
-            </div>
-
-            <div className="text">
-              <p>
-                <b>Price: </b>
-                {productId.price}€
-              </p>
-              <p>
-                <b>Stock: </b> {productId.stock}pcs
-              </p>
-              <p>
-                <b>Discount: </b> {productId.discountPercentage}%
-              </p>
-            </div>
-
-            <div>
-              <p>
-                <b>Description: </b>
-              </p>
-              <p>{productId.description}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="iconArea">
-          {/* <FaAngleDown color={"#202e44"} size={24} /> */}
-        </div>
-        {/* <div>
-          <p>
-            <b>Description: </b>
-          </p>
-          <p>{productId.description}</p>
-        </div> */}
+    <div style={{display: 'flex', flexDirection: 'column', gap: '25px', minHeight: '100vh', }} >
+      <div style={{margin: '25px 25px 0', }}>
+        <Header title={productId.title} userName="AV" />
       </div>
+      
+      <div className="product-detail">
+        <div className="product-content">
+          <div className="img-slider">
+            {images.map((imgSrc, index) => (
+              <div key={index}><img src={imgSrc} alt={`${productId.title} image ${index + 1}`} /></div>
+            ))}
+           
+          </div>
+          <div className="product-info">
+            {activeTab === "details" && (
+              <div>
+                <h2>General information</h2>
+                <div className="product-info-section">
+                  <div>Product name</div>
+                  <div><strong>{productId.title}</strong></div>
+                </div>
+                <div className="product-details-section" >
+                  <div>
+                    <div><div>Sku</div> <div>{productId.sku}</div> </div>
+                    <div><div>Available quantity</div> <div>{productId.stock}</div></div>
+                  </div>
+                  <div >
+                    <div> <div>Price</div> <div>{productId.price}€</div> </div>
+                    <div><div>Discount</div> <div>{productId.discountPercentage}%</div></div>
+                  </div>
+                  <div >
+                    <div> <div>Category</div> <div>{productId.category}</div> </div>
+                    <div><div>Brand</div> <div>{productId.brand}</div></div>
+                  </div>
+                </div>
+                <div className="product-info-section" style={{marginTop: '15px'}} >
+                  <div>Description</div>
+                  <div>{productId.description}</div>
+                </div>
+              </div>
+            )}
+            {activeTab === "dimensions" && (
+              <div>
+                <h2>Product Dimensions</h2>
+                <div className="product-details-section" >
+                  <div>
+                    <div><div>Width</div> <div>{productId.dimensions.width}cm</div> </div>
+                    <div ><div>Height</div> <div>{productId.dimensions.height}cm</div></div>
+                  </div>
+                  <div>
+                    <div><div>Depth</div> <div>{productId.dimensions.depth}cm</div> </div>
+                    <div ><div>Weight</div> <div>{productId.weight}g</div></div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {activeTab === "meta" && (
+              <div>
+                <h2>Product Meta</h2>
+                <div className="product-details-section" >
+                  <div>
+                    <div><div>createdAt</div> <div>{formatDate(productId.meta.createdAt)}</div> </div>
+                    <div ><div>updatedAt</div> <div>{formatDate(productId.meta.updatedAt)}</div></div>
+                  </div>
+                  <div>
+                    <div><div>Barcode</div> <div>{productId.meta.barcode}</div> </div>
+                    <div ><div>QR Code</div><div>{productId.meta.qrCode}</div></div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {activeTab === "reviews" && (
+              <div>
+                <h2>Customer Reviews</h2> 
+              </div>
+            )}
+          </div>
+          
+        </div>
+        <div className="product-menu">
+          <div className="product-menu-items">
+            <div className={activeTab === "details" ? "active" : ""} onClick={() => setActiveTab("details")}>
+              <div><LuInfo size={26} color="var(--primary800-color)"/></div>
+              <div>
+                <div><strong>General information</strong></div>
+                <div style={{ color: activeTab === "details" ? "#1b2a3f" : "#666", }}>Basic product information</div>
+              </div>
+            </div>
+            <div className={activeTab === "dimensions" ? "active" : ""} onClick={() => setActiveTab("dimensions")}>
+              <div><LuRuler size={26} color="var(--primary800-color)"/></div>
+              <div>
+                <div><strong>Product Dimensions</strong></div>
+                <div style={{ color: activeTab === "dimensions" ? "#1b2a3f" : "#666" }}>View the size and weight of the product</div>
+              </div>
+            </div>
+            <div className={activeTab === "meta" ? "active" : ""} onClick={() => setActiveTab("meta")}>
+              <div><LuHash size={26} color="var(--primary800-color)" /></div>
+              <div>
+                <div><strong>Product Meta</strong></div>
+                <div style={{ color: activeTab === "meta" ? "#1b2a3f" : "#666" }}>Additional product information</div>
+              </div>
+            </div>
+            <div className={activeTab === "reviews" ? "active" : ""} onClick={() => setActiveTab("reviews")}>
+              <div><LuMessageSquare size={26} color="var(--primary800-color)"/></div>
+              <div>
+                <div><strong>Customer Reviews</strong></div>
+                <div style={{ color: activeTab === "reviews" ? "#1b2a3f" : "#666" }}>Read what our customers are saying</div>
+              </div>
+            </div>
+          </div>
+          <div className="product-menu-footer">
+            <div >
+              <div><LuTrash2 size={26} color="#283455"/></div>
+              <div>
+                <div><strong>Deactivate product</strong></div>
+                <div style={{ color: activeTab === "details" ? "#1b2a3f" : "#666" }}>Remove product from the catalog</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
     </div>
   );
 };
 
-export const ProductDetailLoader = async ({ params }: LoaderFunctionArgs) => {
-  if (!params.id) {
-    throw new Error("Missing product id");
-  }
-
+export const productDetailLoader = async ({ params }: LoaderFunctionArgs) => {
+  if (!params.id) throw new Error("Missing product id");
   const res = await fetch("https://dummyjson.com/products/" + params.id);
-
-  if (!res.ok) {
-    throw Error("Could not find that product");
-  }
-
+  if (!res.ok) throw Error("Could not find that product");
   return res.json();
 };
 

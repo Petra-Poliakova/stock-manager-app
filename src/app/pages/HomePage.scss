@@ -29,9 +29,6 @@
     }
 
     .chart-box {
-        width: 100%;
-        height: auto;
-        margin: 25px 0;
         border-radius: 10px;
         background-color: var(--white-color);
         .title{
@@ -50,9 +47,6 @@
     }
 
 .top-rating-table{
-    width: 100%;
-    height: auto;
-    margin: 25px 0;
     border-radius: 10px;
     padding-bottom: 50px;
     background-color: var(--white-color);
@@ -61,6 +55,23 @@
         font-size: 20px;
         font-weight: bold;
         color: var(--primary-color);
+    }
+}
+
+@media (max-width: 768px) {
+    .box-container {
+        flex-direction: column;
+        .box {
+            width: 90%;
+        }
+    }   
+}
+
+@media (max-width: 480px) {
+    .box-container {
+        .box {
+            width: 83%;
+        }
     }
 }
 

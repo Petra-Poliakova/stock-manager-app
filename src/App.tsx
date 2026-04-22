@@ -8,7 +8,7 @@ import {
 import { MenuProvider } from "@/context/MenuContext";
 import RootLayout from "@/layouts/RootLayout";
 import SupportLayout from "@/layouts/SupportLayout";
-import { ProductDetailLoader } from "@/app/pages/products/ProductDetail";
+import { productDetailLoader } from "@/app/pages/products/ProductDetail";
 import "./App.scss";
 import LoadingSpinner from "@/components/LoadingSpinner"; 
 
@@ -27,7 +27,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<Suspense fallback={<LoadingFallback />}><HomePage /></Suspense>} />
       <Route path="products" element={<Suspense fallback={<LoadingFallback />}><Product /></Suspense> } />
-      <Route path="products/:id" element={<Suspense fallback={<LoadingFallback />}><ProductDetail /></Suspense>} loader={ProductDetailLoader} errorElement={<Suspense fallback={<LoadingFallback />}><ProductError /></Suspense>} />
+      <Route path="products/:id" element={<Suspense fallback={<LoadingFallback />}><ProductDetail /></Suspense>} loader={productDetailLoader} errorElement={<Suspense fallback={<LoadingFallback />}><ProductError /></Suspense>} />
 
       <Route path="support" element={<SupportLayout/>}>
         <Route path="contact" element={<Suspense fallback={<LoadingFallback />}><Contact/></Suspense>}></Route>

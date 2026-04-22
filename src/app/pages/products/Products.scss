@@ -1,12 +1,30 @@
 .table-container {
-    width: 100%;
     min-height: 500px;
-    margin: 25px 0;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     border-radius: 10px;
     padding-bottom: 50px;
     background-color: var(--white-color);
+    .table-toolbar{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        //padding: 0 25px;
+        .table-toolbar-left{
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+        }
+        .table-toolbar-right {
+            display: flex;
+            flex-direction: row;
+            padding: 25px;
+            gap: 10px;
+        }
+    }
     .price{
         color: var(--accent);
     }
@@ -16,8 +34,7 @@
 }
 
 .filter-container {
-    min-height: 65 px;
-    margin: 25px 0;
+    min-height: 65px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -29,5 +46,48 @@
         display: flex;
         flex-direction: row;
         gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-container {
+        width: 100% ;
+        > div {
+            flex-direction: column;
+        }
+        > div > div {
+            width: 100%;
+        }
+    }
+    .table-container {
+        .table-toolbar{
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+           
+           
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-container {
+        padding: 15px;
+        width: 100%;
+        
+    }
+    .table-container {
+        padding: 15px;
+        .table-toolbar{
+            padding: 0;
+             .table-toolbar-left{
+                padding: 0;
+            }
+             .table-toolbar-right {
+                padding: 0;
+                padding-bottom: 15px;
+                flex-direction: column;
+            }
+        }
     }
 }

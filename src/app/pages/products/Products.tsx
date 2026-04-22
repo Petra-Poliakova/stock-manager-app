@@ -424,13 +424,13 @@ const hasActiveFilters =
           >Clear all filters</Button>
         </div>}
       </div>
-      <div className="table-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", }} >
-        <div style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", }} >
-          <div style={{ display: "flex", flexDirection: "column", padding: "25px", }} >
+      <div className="table-container" >
+        <div className="table-toolbar">
+          <div className="table-toolbar-left" >
             <div className="title-box">Overview</div>
             <div>Quickly access product details directly from the table.</div>
           </div> 
-          <div style={{ display: "flex", flexDirection: "row", padding: "25px", gap: "10px", }} >
+          <div className="table-toolbar-right" >
             <Button
               variant="text"
               sx={{color: "#202e44", textTransform: "none", "&:hover": { backgroundColor: "transparent", color: "#8b734c" },}}
