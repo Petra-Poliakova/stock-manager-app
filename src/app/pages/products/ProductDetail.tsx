@@ -57,6 +57,22 @@ export interface ProductDetailData {
 export const ProductDetail = () => {
   const productId = useLoaderData() as ProductDetailData;
   const [activeTab, setActiveTab] = useState< "details" | "reviews" | "dimensions" | "meta">("details");
+  const reviews = productId.reviews ?? [];
+  const reviewCount = reviews.length;
+  const averageRating = reviewCount
+    ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviewCount
+    : productId.rating;
+  const roundedAverageRating = Number(averageRating.toFixed(1));
+  const roundedProductRating = Math.round(averageRating);
+  const ratingDistribution = [5, 4, 3, 2, 1].map((star) => {
+    const count = reviews.filter((review) => Math.round(review.rating) === star).length;
+
+    return {
+      star,
+      count,
+      percentage: reviewCount ? (count / reviewCount) * 100 : 0,
+    };
+  });
 
   const images = [
     productId.images[0] || UniversalImg,
@@ -137,8 +153,72 @@ export const ProductDetail = () => {
               </div>
             )}
             {activeTab === "reviews" && (
-              <div>
-                <h2>Customer Reviews</h2> 
+              <div className="reviews-section">
+                <h2>Customer Reviews</h2>
+                <div className="reviews-summary">
+                  <div className="reviews-overview-card">
+                    <div className="reviews-overview-rating">{roundedAverageRating}</div>
+                    <div className="reviews-stars" aria-label={`Average rating ${roundedAverageRating} out of 5`}>
+                      {Array.from({ length: 5 }, (_, index) => (
+                        <span
+                          key={index}
+                          className={index < roundedProductRating ? "filled" : ""}
+                        >
+                          ★
+                        </span>
+                      ))}
+                    </div>
+                    <div className="reviews-overview-text">
+                      Based on {reviewCount} {reviewCount === 1 ? "customer review" : "customer reviews"}
+                    </div>
+                  </div>
+
+                  <div className="reviews-breakdown-card">
+                    {ratingDistribution.map((item) => (
+                      <div key={item.star} className="reviews-breakdown-row">
+                        <div>{item.star} stars</div>
+                        <div className="reviews-breakdown-bar">
+                          <span style={{ width: `${item.percentage}%` }} />
+                        </div>
+                        <div>{item.count}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="reviews-list">
+                  {reviews.map((review, index) => (
+                    <div key={index} className="review-card">
+                      <div className="review-card-header">
+                        <div>
+                          <div className="reviewer-name">{review.reviewerName}</div>
+                          <div className="reviewer-email">{review.reviewerEmail}</div>
+                        </div>
+                        <div className="review-rating-box">
+                          <div className="reviews-stars" aria-label={`Rating ${review.rating} out of 5`}>
+                            {Array.from({ length: 5 }, (_, starIndex) => (
+                              <span
+                                key={starIndex}
+                                className={starIndex < Math.round(review.rating) ? "filled" : ""}
+                              >
+                                ★
+                              </span>
+                            ))}
+                          </div>
+                          <div className="review-rating-meta">
+                            <span>{review.rating.toFixed(1)}/5</span>
+                            <span>{formatDate(review.date)}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="review-comment">
+                        <div>Comment</div>
+                        <p>{review.comment}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
