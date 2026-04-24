@@ -1,19 +1,33 @@
 .contatWrapper{
 display: flex;
 justify-content: space-between;
+flex-wrap: wrap;
+gap: 20px;
 margin: 50px 0;
 
 .contactBox{
-    width: 23%;
-    height: 250px;
+    flex: 1 1 200px;
+    min-height: 250px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: var(--white-color);
-    background-color: var(--accent);
+    background-color: var(--color-primary);
+    border-radius: 10px;
     animation: fadeOut 1s;
+    padding: 20px;
+    
+    a {
+        color: var(--color-neutral-secondary);
+        text-decoration: none;
+        transition: color 0.2s ease;
+        &:hover {
+            color: var(--color-white);
+            text-decoration: underline;
+        }
+    }
 }
 @keyframes fadeOut {
     0% {opacity: 0;}
@@ -25,10 +39,24 @@ p, h3, i {
   h2 {
     font-size: large;
     font-weight: 600;
-    color: var(--neutral-secondary-color);
+    color: var(--color-neutral-secondary);
     text-transform: uppercase;
   }
 }
 
-  
- 
+@media (max-width: 768px) {
+    .contatWrapper {
+        flex-direction: column;
+        align-items: center;
+        .contactBox {
+            width: 80%;
+            min-height: 180px;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .contatWrapper .contactBox {
+        width: 95%;
+    }
+}

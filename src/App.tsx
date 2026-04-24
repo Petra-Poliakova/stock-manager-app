@@ -18,6 +18,7 @@ const ProductDetail = lazy(() => import('@/app/pages/products/ProductDetail').th
 const ProductError = lazy(() => import('@/app/pages/products/ProductError'));
 const Contact = lazy(() => import('@/app/pages/support/Contact'));
 const ContactForm = lazy(() => import('@/app/pages/support/ContactForm'));
+const Faq = lazy(() => import('@/app/pages/support/Faq'));
 const NotFound = lazy(() => import('@/app/NotFound'));
 
 const LoadingFallback = () => <LoadingSpinner size='large' loading={true}/>;
@@ -30,6 +31,8 @@ const router = createBrowserRouter(
       <Route path="products/:id" element={<Suspense fallback={<LoadingFallback />}><ProductDetail /></Suspense>} loader={productDetailLoader} errorElement={<Suspense fallback={<LoadingFallback />}><ProductError /></Suspense>} />
 
       <Route path="support" element={<SupportLayout/>}>
+        <Route index element={<Suspense fallback={<LoadingFallback />}><Faq/></Suspense>}></Route>
+        <Route path="faq" element={<Suspense fallback={<LoadingFallback />}><Faq/></Suspense>}></Route>
         <Route path="contact" element={<Suspense fallback={<LoadingFallback />}><Contact/></Suspense>}></Route>
         <Route path="contactForm" element={<Suspense fallback={<LoadingFallback />} ><ContactForm/></Suspense>}></Route>
       </Route>

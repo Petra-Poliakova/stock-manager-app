@@ -2,11 +2,19 @@
     width: 50%;
     height: auto;
     margin: 50px auto;
-    
-    background-color: var(--neutral-primary-color);
+    border-radius: 10px;
+    background-color: var(--white-color);
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     h2{
         padding: 25px 0;
+    }
+    .successMessage {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 12px 20px;
+        margin: 0 50px;
+        border-radius: 6px;
+        font-weight: 600;
     }
     .forms{
         margin: 25px 50px;
@@ -15,14 +23,71 @@
         flex-direction: column;
         gap: 15px;
     }
+    .formField {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+    }
+    .formItem {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 14px;
+        border: 2px solid var(--color-light-grey);
+        border-radius: 6px;
+        font-family: inherit;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease;
+        &:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+        &.error {
+            border-color: #dc3545;
+        }
+    }
+    .errorText {
+        color: #dc3545;
+        font-size: 13px;
+        margin-top: 4px;
+    }
     button{
         width: 25%;
         margin: auto;
-        background-color: var(--neutral-primary-color);
-        border: 2px solid var(--primary-color);
-        color: var(--primary-color);
+        background-color: var(--color-primary-dark);
+        border: none;
+        color: var(--color-white);
         text-transform: uppercase;
         font-size: 16px;
         font-weight: bold;
+        padding: 10px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        &:hover {
+            background-color: var(--color-primary-medium);
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .formWrapper {
+        width: 90%;
+        .forms {
+            margin: 25px 20px;
+        }
+        .successMessage {
+            margin: 0 20px;
+        }
+        button {
+            width: 50%;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .formWrapper {
+        width: 95%;
+        button {
+            width: 70%;
+        }
     }
 }
