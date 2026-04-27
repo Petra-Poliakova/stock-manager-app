@@ -267,28 +267,28 @@ const navigate = useNavigate();
         <div className="product-menu">
           <div className="product-menu-items">
             <div className={activeTab === "details" ? "active" : ""} onClick={() => setActiveTab("details")}>
-              <div><LuInfo size={26} color="var(--primary800-color)"/></div>
+              <div><LuInfo size={26} color="var(--color-primary-dark)"/></div>
               <div>
                 <div><strong>General information</strong></div>
                 <div style={{ color: activeTab === "details" ? "#1b2a3f" : "#666", }}>Basic product information</div>
               </div>
             </div>
             <div className={activeTab === "dimensions" ? "active" : ""} onClick={() => setActiveTab("dimensions")}>
-              <div><LuRuler size={26} color="var(--primary800-color)"/></div>
+              <div><LuRuler size={26} color="var(--color-primary-dark)"/></div>
               <div>
                 <div><strong>Product Dimensions</strong></div>
                 <div style={{ color: activeTab === "dimensions" ? "#1b2a3f" : "#666" }}>View the size and weight of the product</div>
               </div>
             </div>
             <div className={activeTab === "meta" ? "active" : ""} onClick={() => setActiveTab("meta")}>
-              <div><LuHash size={26} color="var(--primary800-color)" /></div>
+              <div><LuHash size={26} color="var(--color-primary-dark)" /></div>
               <div>
                 <div><strong>Product Meta</strong></div>
                 <div style={{ color: activeTab === "meta" ? "#1b2a3f" : "#666" }}>Additional product information</div>
               </div>
             </div>
             <div className={activeTab === "reviews" ? "active" : ""} onClick={() => setActiveTab("reviews")}>
-              <div><LuMessageSquare size={26} color="var(--primary800-color)"/></div>
+              <div><LuMessageSquare size={26} color="var(--color-primary-dark)"/></div>
               <div>
                 <div><strong>Customer Reviews</strong></div>
                 <div style={{ color: activeTab === "reviews" ? "#1b2a3f" : "#666" }}>Read what our customers are saying</div>

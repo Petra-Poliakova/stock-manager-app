@@ -405,12 +405,12 @@ const hasActiveFilters =
         </div>
         <div className="filter-active">
           {tableState.filters.title && <Button variant="contained" endIcon={<MdOutlineClose />} 
-          sx={{textTransform: "none", color: 'var(--accent)', backgroundColor: 'var(--color-neutral-secondary)', "&:hover": { backgroundColor: 'var(--accent)', color: '#fff' },}}
+          sx={{textTransform: "none", color: 'var(--color-accent)', backgroundColor: 'var(--color-neutral-secondary)', "&:hover": { backgroundColor: 'var(--color-accent)', color: '#fff' },}}
           onClick={clearTitleFilter}>
             Product name: {tableState.filters.title}
             </Button>}
           {tableState.filters.category && <Button variant="contained" endIcon={<MdOutlineClose />} 
-          sx={{textTransform: "none", color: 'var(--accent)', backgroundColor: 'var(--color-neutral-secondary)', "&:hover": { backgroundColor: 'var(--accent)', color: '#fff' },}}
+          sx={{textTransform: "none", color: 'var(--color-accent)', backgroundColor: 'var(--color-neutral-secondary)', "&:hover": { backgroundColor: 'var(--color-accent)', color: '#fff' },}}
           onClick={clearCategoryFilter}>
             Category: {tableState.filters.category}
             </Button>}
@@ -418,7 +418,7 @@ const hasActiveFilters =
         {hasActiveFilters && <div className="filter-clear">
           <Button size="medium" variant="outlined" onClick={handleClearFilters}
             sx={{
-              textTransform: "none", color: 'var(--accent)', borderColor: 'var(--accent)',
+              textTransform: "none", color: 'var(--color-accent)', borderColor: 'var(--color-accent)',
               "&:hover": { backgroundColor: 'var(--color-neutral-secondary)' },
             }} 
           >Clear all filters</Button>
@@ -433,7 +433,7 @@ const hasActiveFilters =
           <div className="table-toolbar-right" >
             <Button
               variant="text"
-              sx={{color: "#202e44", textTransform: "none", "&:hover": { backgroundColor: "transparent", color: "#8b734c" },}}
+              sx={{color: "#202e44", textTransform: "none", "&:hover": { backgroundColor: "transparent", color: "var(--color-accent)" },}}
               startIcon={<FaRegTrashAlt size={15} />}
               onClick={deleteSelectedProducts}
             >
@@ -441,7 +441,7 @@ const hasActiveFilters =
             </Button>
             <Button
               variant="outlined"
-              sx={{color: "#202e44", textTransform: "none", "&:hover": { backgroundColor: "transparent", color: "#8b734c" },}}
+              sx={{color: "#202e44", textTransform: "none", "&:hover": { backgroundColor: "transparent", color: "var(--color-accent)" },}}
               startIcon={<LuDownload size={15} />}
               onClick={handleExportProducts}
             >
@@ -452,7 +452,7 @@ const hasActiveFilters =
               sx={{
                 color: "#fff",
                 textTransform: "none",
-                backgroundColor: "#8b734c",
+                backgroundColor: "var(--color-accent)",
                 "&:hover": { backgroundColor: "#7a623f" },
               }}
               startIcon={<FiPlus size={15} />}

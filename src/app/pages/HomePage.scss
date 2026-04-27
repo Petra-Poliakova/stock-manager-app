@@ -12,7 +12,7 @@
             justify-content: space-between;
             border-radius: 10px;
             padding: 25px;
-            background-color: var(--white-color);
+            background-color: var(--color-white);
             .box-text{
                 display: flex;
                 flex-direction: column;
@@ -20,7 +20,7 @@
                     color: #666666;
                 }
                 span:last-child{
-                    color: var(--primary-color);
+                    color: var(--color-primary);
                     font-weight: bold;
                     font-size: 20px;
                 }
@@ -30,12 +30,12 @@
 
     .chart-box {
         border-radius: 10px;
-        background-color: var(--white-color);
+        background-color: var(--color-white);
         .title{
             padding: 25px;
             font-size: 20px;
             font-weight: bold;
-            color: var(--primary-color);
+            color: var(--color-primary);
         }
         .chart {
             width: 90%;
@@ -49,12 +49,12 @@
 .top-rating-table{
     border-radius: 10px;
     padding-bottom: 50px;
-    background-color: var(--white-color);
+    background-color: var(--color-white);
     .title{
         padding: 25px;
         font-size: 20px;
         font-weight: bold;
-        color: var(--primary-color);
+        color: var(--color-primary);
     }
 }
 

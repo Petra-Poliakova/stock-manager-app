@@ -1,18 +1,5 @@
 :root {
-//color variables
---primary-color: #202e44; //logo, headlines, button
---secondary-color: #a9bbc8;
---neutral-primary-color: #c7bcab;
---neutral-secondary-color: #f2f2eb;
---primary800-color: #283a55;
---primary600-color: #304567;
---primary200-color: #f5f6f7;
---primary100-color: #fafafb;
---accent: #8b734c;
---white-color: #ffffff;
---neutral-secondary200-color: #fafaf7;
-
-//new varieble color
+//variable color
  --color-primary: #202e44;
  --color-secondary: #a9bbc8;
  --color-neutral-primary: #c7bcab;
@@ -29,7 +16,6 @@
  --color-text: #1B2A3F;
 
  --color-light-grey:#F0F0F0;
-
 }
 
 h1,
@@ -38,7 +24,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: var(--primary-color);
+  color: var(--color-primary);
 }
 
 h1 {
