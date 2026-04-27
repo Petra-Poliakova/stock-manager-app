@@ -246,10 +246,21 @@ const navigate = useNavigate();
               </div>
             )}
           </div>
-          <div className="product-content-footer"
-            onClick={()=> navigate(`/products/${productId.id}/edit`)}
-          >
-            Edit
+          <div className="product-content-footer">
+            <button
+              type="button"
+              className="product-content-footer-btn primary"
+              onClick={() => navigate(`/products/${productId.id}/edit`)}
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              className="product-content-footer-btn secondary"
+              onClick={() => navigate("/products")}
+            >
+              Close
+            </button>
           </div>
         </div>
         <div className="product-menu">
