@@ -115,8 +115,6 @@ const HomePage = () => {
       quantity: product.stock ?? 0,
     }
   }) ?? [];
-  console.log('topRatingProducts', rows);
-
   
   return (
     <div className="page-container">

@@ -94,9 +94,8 @@ const navigate = useNavigate();
     }
 
     const deletedProduct = await response.json();
-    console.log(deletedProduct);
 
-    alert(`Product ${productId.title}, id: ${productId.id} was deleted`);
+    alert(`Product ${deletedProduct.title}, id: ${deletedProduct.id} was deleted`);
     navigate('/products');
   } catch (error) {
     console.error("Error deleting product:", error);
@@ -247,7 +246,11 @@ const navigate = useNavigate();
               </div>
             )}
           </div>
-          
+          <div className="product-content-footer"
+            onClick={()=> navigate(`/products/${productId.id}/edit`)}
+          >
+            Edit
+          </div>
         </div>
         <div className="product-menu">
           <div className="product-menu-items">
@@ -280,6 +283,7 @@ const navigate = useNavigate();
               </div>
             </div>
           </div>
+          
           <div className="product-menu-footer" onClick={handleDeleteProduct}>
             <div >
               <div><LuTrash2 size={26} color="#283455"/></div>
@@ -290,6 +294,7 @@ const navigate = useNavigate();
             </div>
           </div>
         </div>
+        
       </div>
       
     </div>

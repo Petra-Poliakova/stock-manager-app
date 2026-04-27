@@ -11,8 +11,6 @@ const RootLayout = () => {
   const { isFullSizeMenu } = useMenu();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  console.log("isMobile", isMobile);
-
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
