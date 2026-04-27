@@ -3,7 +3,7 @@ import { useLoaderData, LoaderFunctionArgs, useNavigate } from "react-router";
 import { Header } from "@/components/Header";
 
 import UniversalImg from '../../../assets/univesral-image.jpg';
-import { LuInfo, LuMessageSquare, LuRuler, LuHash, LuTrash2 } from "react-icons/lu";
+import { LuInfo, LuMessageSquare, LuRuler, LuHash, LuTrash2, LuSave } from "react-icons/lu";
 import { formatDate } from "@/helpers/formatDate";
 
 import "./ProductDetail.scss";
@@ -252,7 +252,8 @@ const navigate = useNavigate();
               className="product-content-footer-btn primary"
               onClick={() => navigate(`/products/${productId.id}/edit`)}
             >
-              Edit
+              <LuSave color='#fff' size={20}/>
+              <span style={{marginLeft:'5px'}}>Edit</span>
             </button>
             <button
               type="button"
@@ -305,9 +306,7 @@ const navigate = useNavigate();
             </div>
           </div>
         </div>
-        
       </div>
-      
     </div>
   );
 };
