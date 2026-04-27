@@ -5,54 +5,9 @@ import { Header } from "@/components/Header";
 import UniversalImg from '../../../assets/univesral-image.jpg';
 import { LuInfo, LuMessageSquare, LuRuler, LuHash, LuTrash2, LuSave } from "react-icons/lu";
 import { formatDate } from "@/helpers/formatDate";
+import {ProductDetailData} from "@/types/product"
 
 import "./ProductDetail.scss";
-
-export interface ProductReview {
-  rating: number;
-  comment: string;
-  date: string; // ISO dátum
-  reviewerName: string;
-  reviewerEmail: string;
-}
-
-export interface ProductDimensions {
-  width: number;
-  height: number;
-  depth: number;
-}
-
-export interface ProductMeta {
-  createdAt: string;
-  updatedAt: string;
-  barcode: string;
-  qrCode: string;
-}
-
-export interface ProductDetailData {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  tags: string[];
-  brand: string;
-  sku: string;
-  weight: number;
-  dimensions: ProductDimensions;
-  warrantyInformation: string;
-  shippingInformation: string;
-  availabilityStatus: string;
-  reviews: ProductReview[];
-  returnPolicy: string;
-  minimumOrderQuantity: number;
-  meta: ProductMeta;
-  images: string[];
-  thumbnail: string;
-}
 
 export const ProductDetail = () => {
   const productId = useLoaderData() as ProductDetailData;

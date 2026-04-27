@@ -1,7 +1,7 @@
 import React from 'react'
 import { Header } from '@/components/Header'
 import { useLoaderData, LoaderFunctionArgs } from "react-router";
-import { ProductDetailData } from '@/app/pages/products/ProductDetail'
+import { ProductDetailData } from '@/types/product'
 
 export const ProductEdit = () => {
     const product = useLoaderData() as ProductDetailData
