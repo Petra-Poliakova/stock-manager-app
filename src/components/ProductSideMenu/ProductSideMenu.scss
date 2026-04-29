@@ -1,0 +1,36 @@
+.product-menu{
+  position: relative;
+}
+
+.product-menu-items, .product-menu-footer {
+  display: flex;
+  flex-direction: column;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  border-radius: 10px;
+  > div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    &:last-child {
+      border-bottom: none;
+    }
+    &.active {
+      border-left: 2px solid var(--color-primary);
+    }
+    > div > div {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.product-menu-footer{
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  right: 0;
+}

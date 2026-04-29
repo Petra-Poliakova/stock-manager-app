@@ -3,15 +3,17 @@ import { useLoaderData, LoaderFunctionArgs, useNavigate } from "react-router";
 import { Header } from "@/components/Header";
 
 import UniversalImg from '../../../assets/univesral-image.jpg';
-import { LuInfo, LuMessageSquare, LuRuler, LuHash, LuTrash2, LuSquarePen } from "react-icons/lu";
+import { LuInfo, LuMessageSquare, LuRuler, LuHash, LuSquarePen } from "react-icons/lu";
 import { formatDate } from "@/helpers/formatDate";
-import {ProductDetailData} from "@/types/product"
+import {ProductDetailData} from "@/types/product";
+import { ProductSideMenu } from "@/components/ProductSideMenu/ProductSideMenu";
+import type { ProductMenuItem, ProductTab, } from "@/components/ProductSideMenu/ProductSideMenu";
 
 import "./ProductDetail.scss";
 
 export const ProductDetail = () => {
   const productId = useLoaderData() as ProductDetailData;
-  const [activeTab, setActiveTab] = useState< "details" | "reviews" | "dimensions" | "meta">("details");
+  const [activeTab, setActiveTab] = useState< ProductTab>("details");
   const reviews = productId.reviews ?? [];
   const reviewCount = reviews.length;
   const averageRating = reviewCount
@@ -37,6 +39,33 @@ const navigate = useNavigate();
     productId.images[1] || UniversalImg,
     productId.images[2] || UniversalImg,
   ]
+
+  const menuItems: ProductMenuItem[] = [
+      {
+        id: "details",
+        title: "General information",
+        description: "Basic product information",
+        icon: <LuInfo size={26} color="var(--color-primary-dark)" />,
+      },
+      {
+        id: "dimensions",
+        title: "Product Dimensions",
+        description: "View the size and weight of the product",
+        icon: <LuRuler size={26} color="var(--color-primary-dark)" />,
+      },
+      {
+        id: "meta",
+        title: "Product Meta",
+        description: "Additional product information",
+        icon: <LuHash size={26} color="var(--color-primary-dark)" />,
+      },
+      {
+        id: "reviews",
+        title: "Customer Reviews",
+        description: "Read what our customers are saying",
+        icon: <LuMessageSquare size={26} color="var(--color-primary-dark)" />,
+      },
+    ];
 
  const handleDeleteProduct = async () => {
   try {
@@ -219,48 +248,12 @@ const navigate = useNavigate();
             </button>
           </div>
         </div>
-        <div className="product-menu">
-          <div className="product-menu-items">
-            <div className={activeTab === "details" ? "active" : ""} onClick={() => setActiveTab("details")}>
-              <div><LuInfo size={26} color="var(--color-primary-dark)"/></div>
-              <div>
-                <div><strong>General information</strong></div>
-                <div style={{ color: activeTab === "details" ? "#1b2a3f" : "#666", }}>Basic product information</div>
-              </div>
-            </div>
-            <div className={activeTab === "dimensions" ? "active" : ""} onClick={() => setActiveTab("dimensions")}>
-              <div><LuRuler size={26} color="var(--color-primary-dark)"/></div>
-              <div>
-                <div><strong>Product Dimensions</strong></div>
-                <div style={{ color: activeTab === "dimensions" ? "#1b2a3f" : "#666" }}>View the size and weight of the product</div>
-              </div>
-            </div>
-            <div className={activeTab === "meta" ? "active" : ""} onClick={() => setActiveTab("meta")}>
-              <div><LuHash size={26} color="var(--color-primary-dark)" /></div>
-              <div>
-                <div><strong>Product Meta</strong></div>
-                <div style={{ color: activeTab === "meta" ? "#1b2a3f" : "#666" }}>Additional product information</div>
-              </div>
-            </div>
-            <div className={activeTab === "reviews" ? "active" : ""} onClick={() => setActiveTab("reviews")}>
-              <div><LuMessageSquare size={26} color="var(--color-primary-dark)"/></div>
-              <div>
-                <div><strong>Customer Reviews</strong></div>
-                <div style={{ color: activeTab === "reviews" ? "#1b2a3f" : "#666" }}>Read what our customers are saying</div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="product-menu-footer" onClick={handleDeleteProduct}>
-            <div >
-              <div><LuTrash2 size={26} color="#283455"/></div>
-              <div>
-                <div><strong>Deactivate product</strong></div>
-                <div style={{ color: activeTab === "details" ? "#1b2a3f" : "#666" }}>Remove product from the catalog</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProductSideMenu
+          activeTab={activeTab}
+          items={menuItems}
+          onTabChange={setActiveTab}
+          onDeactivate={handleDeleteProduct}
+        />
       </div>
     </div>
   );
