@@ -12,8 +12,7 @@ import { Button, Box, TextField, Select, MenuItem, InputLabel, FormControl, Sele
 import { FaRegTrashAlt } from "react-icons/fa";
 import { LuDownload } from "react-icons/lu";
 import { FiPlus } from "react-icons/fi";
-import { MdFilterList } from "react-icons/md";
-import { MdOutlineClose } from "react-icons/md";
+import { MdFilterList, MdOutlineClose } from "react-icons/md";
 import { flattenObject } from "@/helpers/flattenObject";
 
 import { utils, writeFile } from "xlsx";
@@ -99,8 +98,6 @@ const defaultTableState: TTableState = {
   sorting: [{ field: "id", sort: "asc" }],
   pagination: { page: 0, pageSize: 10,},
 };
-
-
 
 const Products = () => {
   const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>({ type: 'include', ids: new Set() });
@@ -356,14 +353,6 @@ const handleClearFilters = () => {
 
 const hasActiveFilters =
   Boolean(tableState.filters.title) || Boolean(tableState.filters.category);
-
-
-  // if (isLoading) {
-  //   return <LoadingSpinner />;
-  // }
-  // if (error) {
-  //   return <div>Error: {error.message}</div>;
-  // }
 
   return (
     <div className="page-container">

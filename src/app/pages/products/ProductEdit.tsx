@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useFetch } from "@/hooks/useFetch";
 import { Header } from "@/components/Header";
 import { useLoaderData, LoaderFunctionArgs, useNavigate, useNavigation } from "react-router";
 import { ProductDetailData } from "@/types/product";
@@ -8,7 +9,7 @@ import type { ProductMenuItem, ProductTab, } from "@/components/ProductSideMenu/
 import { LuInfo, LuMessageSquare, LuRuler, LuHash, LuSave} from "react-icons/lu";
 import { PiPencilSimpleLight } from "react-icons/pi";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import {Box, TextField} from '@mui/material';
+import {Box, TextField, Stack, FormLabel, InputAdornment, MenuItem} from '@mui/material';
 
 import "./ProductEdit.scss";
 
@@ -19,6 +20,8 @@ export const ProductEdit = () => {
   const product = useLoaderData() as ProductDetailData;
   const [editData, setEditData] = useState<ProductDetailData>(product);
   const [activeTab, setActiveTab] = useState<ProductTab>("details");
+
+  const { data: categoryList} = useFetch<string[]>( "https://dummyjson.com/products/category-list", );
 
   const images = [
     product.images[0] || UniversalImg,
@@ -53,6 +56,21 @@ export const ProductEdit = () => {
     },
   ];
 
+  const aviability = [
+    {
+      value: 'In Stock',
+      label: 'In Stock',
+    },
+    {
+      value: 'Low Stock',
+      label: 'Low Stock'
+    },
+    {
+      value: 'Out Of Stock',
+      label: 'Out Of Stock'
+    }
+  ]
+
   const handleSave = async () => {
   try {
     const response = await fetch(`https://dummyjson.com/products/${product.id}`, {
@@ -60,27 +78,37 @@ export const ProductEdit = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         title: editData.title,
-        //description: editData.description,
-        //price: editData.price,
-        //discountPercentage: editData.discountPercentage,
-        //stock: editData.stock,
-        //brand: editData.brand,
-        //category: editData.category,
+        description: editData.description,
+        price: editData.price,
+        discountPercentage: editData.discountPercentage,
+        stock: editData.stock,
+        brand: editData.brand,
+        category: editData.category,
+        availabilityStatus: editData.availabilityStatus,
         //weight: editData.weight,
       }),
     });
     if (!response.ok) throw new Error("Failed to save product");
     alert("Product saved successfully!");
-    navigate(`/products/${product.id}`);
+    //navigate(`/products/${product.id}`);
   } catch (error) {
     console.error("Error saving product:", error);
     alert("Saving product failed.");
   }
 };
 
-const SetTitle = (title: string) => {
-  setEditData(prev => prev ? ({...prev, title}) : prev);
-}
+const SetTitle = (title: string) => { setEditData(prev => prev ? ({...prev, title}) : prev);}
+const SetSku = (sku: string) => { setEditData(prev => prev ? ({...prev, sku}) : prev);}
+const SetAvailableQuantity = (stock: number) => { setEditData(prev => prev ? ({...prev, stock}) : prev);}
+const SetPrice = (price: number) => {setEditData(prev => prev ? ({...prev, price}): prev)};
+const SetDiscount = (discountPercentage: number) => {setEditData(prev => prev ? ({...prev, discountPercentage}): prev)};
+const SetCategory = (category: string) => {setEditData(prev => prev ? ({...prev, category}): prev)};
+const SetBrand = (brand: string) => {setEditData(prev => prev ? ({...prev, brand}): prev)};
+const SetAviabilityStatus = (availabilityStatus: string) => {setEditData(prev => prev ? ({...prev, availabilityStatus}): prev)};
+const SetMinimumOrderQuantity = (minimumOrderQuantity: number) => {setEditData(prev => prev ? ({...prev, minimumOrderQuantity}): prev)};
+const SetDescription = (description: string) => {setEditData(prev => prev ? ({...prev, description}): prev)};
+const SetReturnPolicy = (returnPolicy: string) => {setEditData(prev => prev ? ({...prev, returnPolicy}): prev)};
+
 
   const handleDeleteProduct = async () => {
     try {
@@ -133,9 +161,93 @@ const SetTitle = (title: string) => {
                   <span>Main editable information for the product catalog.</span>
                 </div>
                 <Box sx={{ width: '100%', }}>
-                  <div>Product name</div>
-                  <TextField fullWidth hiddenLabel id="fullWidth" size="small" value={editData?.title || ""} 
+                  <FormLabel htmlFor="product-name" sx={{ display: "block", mb: 0.5 }}>Product name</FormLabel>
+                  <TextField id="product-name" fullWidth hiddenLabel size="small" value={editData?.title || ""} 
                     onChange={(e) => SetTitle(e.target.value)}
+                  />
+                </Box>
+                <Stack direction={{ xs: 'column', sm: 'row' }}  spacing={{xs: 1, sm: 2}}>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="sku" sx={{ display: "block", mb: 0.5 }}>SKU</FormLabel>
+                    <TextField id="sku" fullWidth hiddenLabel size="small" value={editData?.sku || ""} 
+                      onChange={(e) => SetSku(e.target.value)}
+                    />
+                  </Box>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="available-quantity" sx={{ display: "block", mb: 0.5 }}>Available quantity</FormLabel>
+                    <TextField id="available-quantity" type='number' fullWidth hiddenLabel size="small" value={editData?.stock || ""} 
+                      onChange={(e) => SetAvailableQuantity(Number(e.target.value))}
+                    />
+                  </Box>
+                </Stack>
+                 <Stack direction={{ xs: 'column', sm: 'row' }}  spacing={{xs: 1, sm: 2}}>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="price" sx={{ display: "block", mb: 0.5 }}>Price</FormLabel>
+                    <TextField id="price" type='number' fullWidth hiddenLabel size="small" value={editData?.price || ""} 
+                      onChange={(e) => SetPrice(Number(e.target.value))}
+                      slotProps={{input: {endAdornment: <InputAdornment position="end">€</InputAdornment>,},}}
+                    />
+                  </Box>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="discount" sx={{ display: "block", mb: 0.5 }}>Discount</FormLabel>
+                    <TextField id="discount" type='number' fullWidth hiddenLabel size="small" value={editData?.discountPercentage || ""} 
+                      onChange={(e) => SetDiscount(Number(e.target.value))}
+                      slotProps={{input: {endAdornment: <InputAdornment position="end">%</InputAdornment>,}}}
+                    />
+                  </Box>
+
+                </Stack>
+                <Stack direction={{ xs: 'column', sm: 'row' }}  spacing={{xs: 1, sm: 2}}>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="category"  sx={{ display: "block", mb: 0.5 }}>Category</FormLabel>
+                    <TextField id="category" select label="Select" defaultValue={editData?.category || ""} fullWidth hiddenLabel size="small" 
+                      onChange={(e) => SetCategory(e.target.value)}
+                    >
+                        {categoryList?.map((option) => (
+                          <MenuItem key={option} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                    </TextField>
+                  </Box>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="brand" sx={{ display: "block", mb: 0.5 }}>Brand</FormLabel>
+                    <TextField id="brand" fullWidth hiddenLabel size="small" value={editData?.brand || ""} 
+                      onChange={(e) => SetBrand(e.target.value)}
+                    />
+                  </Box>
+                </Stack>
+                <Stack direction={{ xs: 'column', sm: 'row' }}  spacing={{xs: 1, sm: 2}}>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="aviability"  sx={{ display: "block", mb: 0.5 }}>Aviability Status</FormLabel>
+                    <TextField id="aviability" select label="Select" defaultValue={editData?.availabilityStatus || ""} fullWidth hiddenLabel size="small" 
+                      onChange={(e) => SetAviabilityStatus(e.target.value)}
+                    >
+                        {aviability?.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                    </TextField>
+                  </Box>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="minimum-order-quantity" sx={{ display: "block", mb: 0.5 }}>Minimum Order Quantity</FormLabel>
+                    <TextField id="minimum-order-quantity" type='number' fullWidth hiddenLabel size="small" value={editData?.minimumOrderQuantity || ""} 
+                      onChange={(e) => SetMinimumOrderQuantity(Number(e.target.value))}
+                    />
+                  </Box>
+                </Stack>
+                <Box sx={{ width: '100%', }}>
+                  <FormLabel htmlFor="description" sx={{ display: "block", mb: 0.5 }}>Description</FormLabel>
+                  <TextField id="product-name" fullWidth hiddenLabel multiline={true} minRows={2} maxRows={10}  size="small" value={editData?.description || ""} 
+                    onChange={(e) => SetDescription(e.target.value)}
+                    sx={{ "& textarea": { resize: "vertical", }, }}
+                  />
+                </Box>
+                <Box sx={{ width: '100%', }}>
+                  <FormLabel htmlFor="return-policy" sx={{ display: "block", mb: 0.5 }}>Return Policy</FormLabel>
+                  <TextField id="return-policy" fullWidth hiddenLabel size="small" value={editData?.returnPolicy || ""} 
+                    onChange={(e) => SetReturnPolicy(e.target.value)}
                   />
                 </Box>
               </div>
@@ -174,7 +286,7 @@ const SetTitle = (title: string) => {
               onClick={handleSave}
             >
               <LuSave color="#fff" size={20} />
-              <span style={{ marginLeft: "5px" }}>Save</span>
+              <span style={{ marginLeft: "5px" }}>Save changes</span>
             </button>
             <button
               type="button"
