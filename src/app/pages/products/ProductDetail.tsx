@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLoaderData, LoaderFunctionArgs, useNavigate } from "react-router";
+import { useLoaderData, LoaderFunctionArgs, useNavigate, useNavigation } from "react-router";
 import { Header } from "@/components/Header";
 
 import UniversalImg from '../../../assets/univesral-image.jpg';
@@ -8,11 +8,14 @@ import { formatDate } from "@/helpers/formatDate";
 import {ProductDetailData} from "@/types/product";
 import { ProductSideMenu } from "@/components/ProductSideMenu/ProductSideMenu";
 import type { ProductMenuItem, ProductTab, } from "@/components/ProductSideMenu/ProductSideMenu";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 import "./ProductDetail.scss";
 
 export const ProductDetail = () => {
   const productId = useLoaderData() as ProductDetailData;
+  const navigation = useNavigation();
+  const isLoading = navigation.state === "loading";
   const [activeTab, setActiveTab] = useState< ProductTab>("details");
   const reviews = productId.reviews ?? [];
   const reviewCount = reviews.length;
@@ -255,6 +258,7 @@ const navigate = useNavigate();
           onDeactivate={handleDeleteProduct}
         />
       </div>
+      {isLoading && <LoadingSpinner />}
     </div>
   );
 };

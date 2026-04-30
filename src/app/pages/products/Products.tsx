@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import type { ChangeEvent } from "react";
-import { Link } from "react-router";
+import { Link, useNavigation } from "react-router";
 import { Header } from "@/components/Header";
 //import Filter from "@/components/Filter";
 import { useFetch } from "@/hooks/useFetch";
@@ -107,8 +107,10 @@ const Products = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [category, setCategory] = useState<string>("");
   const [tableState, setTableState] = useLocalStorage<TTableState>("products-table-state", defaultTableState,);
+  const navigation = useNavigation();
+  const isNavigating = navigation.state === "loading";
   
-  const { data, error, isLoading } = useFetch<TData>( "https://dummyjson.com/products?limit=0", );
+  const { data, isLoading } = useFetch<TData>( "https://dummyjson.com/products?limit=0", );
   const { data: dataCategories } = useFetch<TCategories>( "https://dummyjson.com/products/categories", );
   const { data: categoryList} = useFetch<string[]>( "https://dummyjson.com/products/category-list", );
 
@@ -356,12 +358,12 @@ const hasActiveFilters =
   Boolean(tableState.filters.title) || Boolean(tableState.filters.category);
 
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  // if (isLoading) {
+  //   return <LoadingSpinner />;
+  // }
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
 
   return (
     <div className="page-container">
@@ -509,6 +511,7 @@ const hasActiveFilters =
           />
         </div>
       </div>
+      {(isLoading || isNavigating) && <LoadingSpinner />}
     </div>
   );
 };

@@ -24,25 +24,83 @@
     width: 100%;
   }
 
-  .img-slider>div {
-    flex: 1 1 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    //background: #f5f5f5;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    min-height: 150px;
-    aspect-ratio: 1/1;
-    overflow: hidden;
-  }
+  .img-slider-item {
+    position: relative;
 
-  .img-slider img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+    .img-slider-actions-edit,
+    .img-slider-actions-replace {
+      display: none;
+    }
+
+    &:hover {
+
+      .img-slider-actions-edit,
+      .img-slider-actions-replace {
+        display: flex;
+      }
+    }
+
+    .img-slider-actions-edit {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      align-items: center;
+      justify-content: center;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 3px;
+      background-color: var(--color-white);
+    }
+
+    .img-slider-actions-replace {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 10px;
+      cursor: pointer;
+      border-radius: 10px;
+      padding: 8px 16px;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+      background-color: var(--color-white);
+    }
   }
 }
+
+.img-slider>div {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //background: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  min-height: 150px;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+}
+
+.img-slider img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.product-info-details, 
+.product-info-dimensions, 
+.product-info-meta, 
+.product-info-reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: var(--color-dark-grey);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 20px;
+  border-radius: 10px;
+
+}
+
 
 .product-content-footer {
   margin-top: auto;
@@ -78,12 +136,14 @@
   .product-edit {
     grid-template-columns: 1fr;
   }
+
   .product-content {
     .img-slider {
       flex-direction: column;
     }
   }
-  .product-menu-footer{
+
+  .product-menu-footer {
     position: relative;
     margin-top: 50px;
   }
@@ -91,14 +151,16 @@
 
 @media (max-width: 480px) {
   .product-details-section {
-    > div {
-    flex-direction: column;
-    gap:10px;
+    >div {
+      flex-direction: column;
+      gap: 10px;
     }
   }
+
   .product-content-footer {
     width: 100%;
   }
+
   .product-content-footer-btn {
     flex: 1;
   }
