@@ -7,12 +7,14 @@ import RootLayout from "@/layouts/RootLayout";
 import SupportLayout from "@/layouts/SupportLayout";
 import NotFound from "@/app/NotFound";
 import "./App.scss";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const router = createBrowserRouter(
   [
     {
       path: "/",
       Component: RootLayout,
+      HydrateFallback: LoadingSpinner,
       children: [
         {
           index: true,
@@ -101,7 +103,7 @@ const router = createBrowserRouter(
 const App = () => {
   return (
     <MenuProvider>
-      <RouterProvider router={router} />
+      <RouterProvider router={router}/>
     </MenuProvider>
   );
 };

@@ -6,10 +6,15 @@ import { ProductDetailData } from "@/types/product";
 import UniversalImg from "@/assets/univesral-image.jpg";
 import { ProductSideMenu } from "@/components/ProductSideMenu/ProductSideMenu";
 import type { ProductMenuItem, ProductTab, } from "@/components/ProductSideMenu/ProductSideMenu";
-import { LuInfo, LuMessageSquare, LuRuler, LuHash, LuSave} from "react-icons/lu";
+import { LuInfo, LuRuler, LuHash, LuSave} from "react-icons/lu";
 import { PiPencilSimpleLight } from "react-icons/pi";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import {Box, TextField, Stack, FormLabel, InputAdornment, MenuItem} from '@mui/material';
+import dayjs, { Dayjs } from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 
 import "./ProductEdit.scss";
 
@@ -22,6 +27,8 @@ export const ProductEdit = () => {
   const [activeTab, setActiveTab] = useState<ProductTab>("details");
 
   const { data: categoryList} = useFetch<string[]>( "https://dummyjson.com/products/category-list", );
+  const categoryOptions = categoryList ?? [];
+  const selectedCategory = categoryOptions.includes(editData.category) ? editData.category : "";
 
   const images = [
     product.images[0] || UniversalImg,
@@ -47,12 +54,6 @@ export const ProductEdit = () => {
       title: "Product Meta",
       description: "View system product information",
       icon: <LuHash size={26} color="var(--color-primary-dark)" />,
-    },
-    {
-      id: "reviews",
-      title: "Customer Reviews",
-      description: "Read what customers are saying",
-      icon: <LuMessageSquare size={26} color="var(--color-primary-dark)" />,
     },
   ];
 
@@ -85,7 +86,12 @@ export const ProductEdit = () => {
         brand: editData.brand,
         category: editData.category,
         availabilityStatus: editData.availabilityStatus,
-        //weight: editData.weight,
+        weight: editData.weight,
+        dimensions: editData.dimensions,
+        returnPolicy: editData.returnPolicy,
+        minimumOrderQuantity: editData.minimumOrderQuantity,
+        meta: editData.meta,
+        rating: editData.rating,
       }),
     });
     if (!response.ok) throw new Error("Failed to save product");
@@ -108,7 +114,13 @@ const SetAviabilityStatus = (availabilityStatus: string) => {setEditData(prev =>
 const SetMinimumOrderQuantity = (minimumOrderQuantity: number) => {setEditData(prev => prev ? ({...prev, minimumOrderQuantity}): prev)};
 const SetDescription = (description: string) => {setEditData(prev => prev ? ({...prev, description}): prev)};
 const SetReturnPolicy = (returnPolicy: string) => {setEditData(prev => prev ? ({...prev, returnPolicy}): prev)};
-
+const SetWeight = (weight: number) => {setEditData(prev => prev ? ({...prev, weight}): prev)};
+const SetWidth = (width: number) => {setEditData(prev => prev ? ({...prev, dimensions: {...prev.dimensions, width}}): prev)};
+const SetHeight = (height: number) => {setEditData(prev => prev ? ({...prev, dimensions: {...prev.dimensions, height}}): prev)};
+const SetDepth = (depth: number) => {setEditData(prev => prev ? ({...prev, dimensions: {...prev.dimensions, depth}}): prev)};
+const SetCreatedAt = (createdAt: string) => {setEditData(prev => prev ? ({...prev, meta: {...prev.meta, createdAt}}): prev)};
+const SetUpdatedAt = (updatedAt: string) => {setEditData(prev => prev ? ({...prev, meta: {...prev.meta, updatedAt}}): prev)};
+const SetBarcode = (barcode: string) => {setEditData(prev => prev ? ({...prev, meta: {...prev.meta, barcode}}): prev)};
 
   const handleDeleteProduct = async () => {
     try {
@@ -200,10 +212,11 @@ const SetReturnPolicy = (returnPolicy: string) => {setEditData(prev => prev ? ({
                 <Stack direction={{ xs: 'column', sm: 'row' }}  spacing={{xs: 1, sm: 2}}>
                   <Box sx={{ width: '100%', }}>
                     <FormLabel htmlFor="category"  sx={{ display: "block", mb: 0.5 }}>Category</FormLabel>
-                    <TextField id="category" select label="Select" defaultValue={editData?.category || ""} fullWidth hiddenLabel size="small" 
+                    <TextField id="category" select value={selectedCategory} fullWidth hiddenLabel size="small" 
                       onChange={(e) => SetCategory(e.target.value)}
                     >
-                        {categoryList?.map((option) => (
+                        <MenuItem value="">Select category</MenuItem>
+                        {categoryOptions.map((option) => (
                           <MenuItem key={option} value={option}>
                             {option}
                           </MenuItem>
@@ -220,7 +233,7 @@ const SetReturnPolicy = (returnPolicy: string) => {setEditData(prev => prev ? ({
                 <Stack direction={{ xs: 'column', sm: 'row' }}  spacing={{xs: 1, sm: 2}}>
                   <Box sx={{ width: '100%', }}>
                     <FormLabel htmlFor="aviability"  sx={{ display: "block", mb: 0.5 }}>Aviability Status</FormLabel>
-                    <TextField id="aviability" select label="Select" defaultValue={editData?.availabilityStatus || ""} fullWidth hiddenLabel size="small" 
+                    <TextField id="aviability" select value={editData?.availabilityStatus || ""} fullWidth hiddenLabel size="small" 
                       onChange={(e) => SetAviabilityStatus(e.target.value)}
                     >
                         {aviability?.map((option) => (
@@ -257,7 +270,40 @@ const SetReturnPolicy = (returnPolicy: string) => {setEditData(prev => prev ? ({
                 <div>
                   <h2 style={{margin: 0}}>Product Dimensions</h2>
                   <span>Physical size and weight of the product.</span>
-                </div>
+                </div>  
+                  <Stack direction={{ xs: 'column', sm: 'row' }}  spacing={{xs: 1, sm: 2}}>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="weight" sx={{ display: "block", mb: 0.5 }}>Weight</FormLabel>
+                    <TextField id="weight" type='number' fullWidth hiddenLabel size="small" value={editData?.weight || ""} 
+                      onChange={(e) => SetWeight(Number(e.target.value))}
+                      slotProps={{input: {endAdornment: <InputAdornment position="end">kg</InputAdornment>,},}}
+                    />
+                  </Box>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="width" sx={{ display: "block", mb: 0.5 }}>Width</FormLabel>
+                    <TextField id="width" type='number' fullWidth hiddenLabel size="small" value={editData?.dimensions?.width || ""} 
+                      onChange={(e) => SetWidth(Number(e.target.value))}
+                      slotProps={{input: {endAdornment: <InputAdornment position="end">cm</InputAdornment>,}}}
+                    />
+                  </Box>
+
+                </Stack>
+                <Stack direction={{ xs: 'column', sm: 'row' }}  spacing={{xs: 1, sm: 2}}>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="height" sx={{ display: "block", mb: 0.5 }}>Height</FormLabel>
+                    <TextField id="height" type='number' fullWidth hiddenLabel size="small" value={editData?.dimensions?.height || ""} 
+                      onChange={(e) => SetHeight(Number(e.target.value))}
+                      slotProps={{input: {endAdornment: <InputAdornment position="end">cm</InputAdornment>,},}}
+                    />
+                  </Box>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="depth" sx={{ display: "block", mb: 0.5 }}>Depth</FormLabel>
+                    <TextField id="depth" type='number' fullWidth hiddenLabel size="small" value={editData?.dimensions?.depth || ""} 
+                      onChange={(e) => SetDepth(Number(e.target.value))}
+                      slotProps={{input: {endAdornment: <InputAdornment position="end">cm</InputAdornment>,}}}
+                    />
+                  </Box>
+                </Stack>
               </div>
             )}
             {activeTab === "meta" && (
@@ -266,16 +312,42 @@ const SetReturnPolicy = (returnPolicy: string) => {setEditData(prev => prev ? ({
                  <h2 style={{margin: 0}}>Product Meta</h2>
                  <span>System information is shown as read-only data.</span>
                </div>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                       <DatePicker
+                        label="Created At"
+                        value={editData?.meta?.createdAt ? dayjs(editData.meta.createdAt) : null}
+                        onChange={(newValue: Dayjs | null) => SetCreatedAt(newValue ? newValue.toISOString() : '')}
+                        slotProps={{ textField: { fullWidth: true, hiddenLabel: true, size: "small" } }}
+                      />
+                    </Box>
+                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                      <DatePicker
+                        label="Updated At"
+                        value={editData?.meta?.updatedAt ? dayjs(editData.meta.updatedAt) : null}
+                        onChange={(newValue: Dayjs | null) => SetUpdatedAt(newValue ? newValue.toISOString() : '')}
+                        slotProps={{ textField: { fullWidth: true, hiddenLabel: true, size: "small" } }}
+                      />
+                    </Box>
+                  </Stack>
+                  <Stack direction={{ xs: 'column', sm: 'row' }}  spacing={{xs: 1, sm: 2}}>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="barcode" sx={{ display: "block", mb: 0.5 }}>Barcode</FormLabel>
+                    <TextField id="barcode" fullWidth hiddenLabel size="small" value={editData?.meta?.barcode || ""} 
+                      onChange={(e) => SetBarcode(e.target.value)}
+                    />
+                  </Box>
+                  <Box sx={{ width: '100%', }}>
+                    <FormLabel htmlFor="rating" sx={{ display: "block", mb: 0.5 }}>Rating</FormLabel>
+                    <TextField id="rating" fullWidth hiddenLabel size="small" value={editData?.rating != null ? `${editData.rating} / 5` : ""} 
+                      //onChange={(e) => SetRating(Number(e.target.value))}
+                      slotProps={{input: {readOnly: true},}}
+                    />
+                  </Box>
+                </Stack>
+                </LocalizationProvider>
                
-              </div>
-            )}
-            {activeTab === "reviews" && (
-              <div className="product-info-reviews">
-                <div>
-                  <h2 style={{margin: 0}}>Customer Reviews</h2>
-                  <span>Reviews are displayed for context only.</span>
-                </div>
-
               </div>
             )}
           </div>

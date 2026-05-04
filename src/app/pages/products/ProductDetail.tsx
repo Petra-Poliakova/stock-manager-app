@@ -158,7 +158,7 @@ const navigate = useNavigate();
                   </div>
                   <div>
                     <div><div>Barcode</div> <div>{productId.meta.barcode}</div> </div>
-                    <div ><div>QR Code</div><div>{productId.meta.qrCode}</div></div>
+                    <div ><div>QR Code</div><div><img src={productId.meta.qrCode} alt="QR Code" /></div></div>
                   </div>
                 </div>
               </div>
