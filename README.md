@@ -83,7 +83,7 @@ VITE_URL_BASE=/
 If you host the app in a subdirectory (for example GitHub Pages), use:
 
 ```env
-VITE_URL_BASE=/stock-manager/
+VITE_URL_BASE=/stock-manager-app/
 ```
 
 ### 3. Development server
