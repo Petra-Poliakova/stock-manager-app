@@ -38,7 +38,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_URL_BASE: /stock-manager/
+          VITE_URL_BASE: /stock-manager-app/
 
       - name: Add SPA fallback
         run: cp dist/index.html dist/404.html
