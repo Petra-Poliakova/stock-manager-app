@@ -2,7 +2,6 @@ import React, { useState, useMemo } from "react";
 import type { ChangeEvent } from "react";
 import { Link, useNavigation } from "react-router";
 import { Header } from "@/components/Header";
-//import Filter from "@/components/Filter";
 import { useFetch } from "@/hooks/useFetch";
 import { useLocalStorage } from "@/hooks/useLocalSrorage";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -14,8 +13,6 @@ import { LuDownload } from "react-icons/lu";
 import { FiPlus } from "react-icons/fi";
 import { MdFilterList, MdOutlineClose } from "react-icons/md";
 import { flattenObject } from "@/helpers/flattenObject";
-
-import { utils, writeFile } from "xlsx";
 
 import "./Products.scss";
 
@@ -219,15 +216,16 @@ const Products = () => {
   }
 };
 
-  const handleExportProducts = () => {
+  const handleExportProducts = async () => {
     if (rowSelectedProducts?.length === 0) { alert("Please select at least one product to export."); return; }
+
+    const { utils, writeFile } = await import("xlsx");
 
     const flatData = rowSelectedProducts?.map((product: TProducts) =>
         flattenObject(product),
     );
 
     const wb = utils.book_new();
-    //let ws = utils.json_to_sheet(selectedProducts);
     const ws = utils.json_to_sheet(flatData ?? []);
     utils.book_append_sheet(wb, ws, "Products");
     writeFile(wb, "products.xlsx");

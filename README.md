@@ -6,20 +6,27 @@ The project displays a sales overview, a product table with actions, and a suppo
 
 ## Main Features
 
-- Dashboard with KPI cards:
-  - New sales
-  - New sales revenue
-  - Revenue per unit
+- Dashboard with KPI cards for new sales, revenue, and revenue per unit
 - Low stock products chart (Chart.js + react-chartjs-2)
 - Top rated products table (MUI Table)
 - Products page (MUI DataGrid):
+  - product name and category filters
+  - persisted table filters, sorting, and pagination through local storage
   - row selection
   - product deletion via API
   - export selected products to XLSX
   - add a new product through a modal form
   - navigation to product detail
 - Product detail via dynamic route `products/:id` with a loader
+  - product image gallery
+  - product metadata and QR code preview
+- Product edit via dynamic route `products/:id/edit` with a loader
+  - editable general product information
+  - editable dimensions and weight
+  - editable product metadata dates and barcode
+  - product update via API
 - Support section:
+  - FAQ page
   - contact details
   - simple contact form
 - Collapsible sidebar menu via context (`MenuContext`)
@@ -32,6 +39,8 @@ The project displays a sales overview, a product table with actions, and a suppo
 - Vite
 - React Router
 - Material UI (`@mui/material`, `@mui/x-data-grid`)
+- MUI Date Pickers (`@mui/x-date-pickers`)
+- dayjs
 - Sass (SCSS)
 - Chart.js + react-chartjs-2
 - xlsx
@@ -41,13 +50,16 @@ The project displays a sales overview, a product table with actions, and a suppo
 
 - External API: [DummyJSON Products API](https://dummyjson.com/products)
 - Local demo sales data: `src/data/sales.json`
+- Products table state is persisted in browser local storage.
 
 API endpoints used in the project:
 
 - `GET https://dummyjson.com/products?limit=0`
 - `GET https://dummyjson.com/products/categories`
+- `GET https://dummyjson.com/products/category-list`
 - `GET https://dummyjson.com/products/:id`
 - `POST https://dummyjson.com/products/add`
+- `PUT https://dummyjson.com/products/:id`
 - `DELETE https://dummyjson.com/products/:id`
 
 ## Run the Project Locally
@@ -115,17 +127,28 @@ src/
       products/
         Products.tsx
         ProductDetail.tsx
+        ProductEdit.tsx
+        ProductError.tsx
       support/
+        Faq.tsx
         Contact.tsx
         ContactForm.tsx
   components/
+    ProductSideMenu/
+      ProductSideMenu.tsx
+    CreateProductDialog.tsx
     Header.tsx
     LoadingSpinner.tsx
   context/
     MenuContext.tsx
+  helpers/
+    flattenObject.ts
+    formatDate.ts
   hooks/
     useFetch.ts
     useLocalSrorage.ts
+  constans/
+    constans.ts
   layouts/
     RootLayout.tsx
     SupportLayout.tsx
@@ -137,4 +160,5 @@ src/
 
 - Alias `@` points to `src`.
 - Products are loaded from an external API, so the app requires an internet connection.
-- `POST/DELETE` operations are executed against a public test API (DummyJSON).
+- Product create, update, and delete operations are executed against a public test API (DummyJSON).
+- DummyJSON returns simulated responses for write operations, but it does not permanently persist changes like a production database.

@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     base: env.VITE_URL_BASE,
     plugins: [
       react(),
-      svgr()
+      svgr({include: "**/*.svg?react",})
     ],
     resolve: {
       alias: {

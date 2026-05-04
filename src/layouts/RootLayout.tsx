@@ -1,4 +1,4 @@
-import React, { FunctionComponent, SVGProps, useEffect, useState } from 'react';
+import { FunctionComponent, SVGProps, useEffect, useState } from 'react';
 import { NavLink, Outlet } from "react-router";
 import { useMenu } from "@/context/MenuContext";
 
