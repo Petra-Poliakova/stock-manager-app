@@ -2,13 +2,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Full viewport height */
-    width: 100vw; /* Full viewport width */
-    position: fixed; /* Fixed positioning to cover the viewport */
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.spinner-container--fullscreen {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 9999; /* Ensure it's above other content if needed */
-    background-color: rgba(255, 255, 255, 0.7); /* Optional: semi-transparent background */
+}
+
+.spinner-container--content {
+    position: absolute;
+    inset: 0;
+    min-height: 240px;
+    border-radius: inherit;
 }
 
 .spinner {

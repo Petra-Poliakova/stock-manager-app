@@ -148,14 +148,14 @@ const SetBarcode = (barcode: string) => {setEditData(prev => prev ? ({...prev, m
   };
 
   return (
-    <div  style={{display: 'flex', flexDirection: 'column', gap: '25px', minHeight: '100vh', }}>
+    <div  style={{display: 'flex', flexDirection: 'column', gap: '25px', minHeight: '100vh', position: 'relative', }}>
       <div style={{margin: '25px 25px 0', }}>
         <Header title={product.title} userName="AV" />
       </div>
 
       <div className="product-edit">
         <div className="product-content">
-          {isLoading && <LoadingSpinner />}
+          {isLoading && <LoadingSpinner scope="content" />}
           <div className="img-slider">
             {images.map((imgSrc, index) => (
                 <div key={index} className="img-slider-item">

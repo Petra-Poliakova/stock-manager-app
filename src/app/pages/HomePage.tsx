@@ -29,7 +29,11 @@ const HomePage = () => {
   const {data, error, isLoading} = useFetch<TData>('https://dummyjson.com/products?limit=0',)
 
   if (isLoading) {
-    return <LoadingSpinner />
+    return (
+      <div className="page-container">
+        <LoadingSpinner scope="content" />
+      </div>
+    )
   }
   if (error) {
     return <div>Error: {error?.message}</div>

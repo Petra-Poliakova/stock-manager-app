@@ -498,7 +498,7 @@ const hasActiveFilters =
           />
         </div>
       </div>
-      {(isLoading || isNavigating) && <LoadingSpinner />}
+      {(isLoading || isNavigating) && <LoadingSpinner scope="content" />}
     </div>
   );
 };

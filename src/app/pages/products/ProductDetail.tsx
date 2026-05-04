@@ -92,7 +92,7 @@ const navigate = useNavigate();
 
 
   return (
-    <div style={{display: 'flex', flexDirection: 'column', gap: '25px', minHeight: '100vh', }} >
+    <div style={{display: 'flex', flexDirection: 'column', gap: '25px', minHeight: '100vh', position: 'relative', }} >
       <div style={{margin: '25px 25px 0', }}>
         <Header title={productId.title} userName="AV" />
       </div>
@@ -258,7 +258,7 @@ const navigate = useNavigate();
           onDeactivate={handleDeleteProduct}
         />
       </div>
-      {isLoading && <LoadingSpinner />}
+      {isLoading && <LoadingSpinner scope="content" />}
     </div>
   );
 };
