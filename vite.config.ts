@@ -7,7 +7,7 @@ import svgr from 'vite-plugin-svgr'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
-    base: env.VITE_URL_BASE,
+    base: env.VITE_URL_BASE || "/",
     plugins: [
       react(),
       svgr({include: "**/*.svg?react",})
