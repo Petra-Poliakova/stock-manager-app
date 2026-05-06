@@ -1,5 +1,7 @@
 # Stock Manager App
 
+Demo: https://petra-poliakova.github.io/stock-manager-app/
+
 Frontend application for product management and a simple inventory dashboard built with React + TypeScript + Vite.
 
 The project displays a sales overview, a product table with actions, and a support section.
