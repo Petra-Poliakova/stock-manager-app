@@ -1,5 +1,5 @@
 import { useMenu } from '@/context/MenuContext'
-import { IMAGES } from '@/constans/constans'
+import { IMAGES } from '@/constants/constants'
 
 import { styled } from '@mui/material/styles';
 

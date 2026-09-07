@@ -7,7 +7,7 @@ import {Bar} from 'react-chartjs-2'
 import LoadingSpinner from '@/components/LoadingSpinner'
 
 import { TData } from '@/app/pages/products/Products'
-import { IMAGES } from '@/constans/constans'
+import { IMAGES } from '@/constants/constants'
 
 import salesData from '@/data/sales.json'
 

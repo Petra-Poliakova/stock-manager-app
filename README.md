@@ -148,7 +148,7 @@ src/
     formatDate.ts
   hooks/
     useFetch.ts
-    useLocalSrorage.ts
+    useLocalStorage.ts
   constans/
     constans.ts
   layouts/

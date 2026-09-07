@@ -2,7 +2,7 @@ import { FunctionComponent, SVGProps, useEffect, useState } from 'react';
 import { NavLink, Outlet } from "react-router";
 import { useMenu } from "@/context/MenuContext";
 
-import { IMAGES } from '@/constans/constans';
+import { IMAGES } from '@/constants/constants';
 
 import "./RootLayout.scss"
 

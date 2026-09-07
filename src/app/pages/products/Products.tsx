@@ -3,7 +3,7 @@ import type { ChangeEvent } from "react";
 import { Link, useNavigation } from "react-router";
 import { Header } from "@/components/Header";
 import { useFetch } from "@/hooks/useFetch";
-import { useLocalStorage } from "@/hooks/useLocalSrorage";
+import { useLocalStorage } from "@/hooks/useLocalStorage.ts";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import CreateProductDialog from "@/components/CreateProductDialog";
 import { DataGrid, GridColDef, GridRowSelectionModel, GridRenderCellParams, GridSortModel } from "@mui/x-data-grid";
